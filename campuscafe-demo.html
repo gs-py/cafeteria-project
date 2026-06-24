@@ -576,6 +576,7 @@ tbody tr:last-child td{border-bottom:none}
    REVIEW FIXES — a11y · overflow · responsive · states
    ============================================================ */
 .switch:focus-visible{box-shadow:var(--ring)}
+.kpi .delta.flat{color:var(--ink-mute)}
 .sr-only{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0}
 .tx-info b,.cl-info b{white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:100%}
 .td-user b{white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:180px;display:block}
@@ -611,11 +612,11 @@ tbody tr:last-child td{border-bottom:none}
     CampusCafé
     <span class="tag">Interactive Prototype</span>
   </div>
-  <div class="role-switch" id="roleSwitch">
-    <button data-role="login"><svg viewBox="0 0 24 24" fill="none"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg><span>Home</span></button>
-    <button data-role="admin"><svg viewBox="0 0 24 24" fill="none"><rect x="3" y="3" width="7" height="9" rx="1.5" stroke="currentColor" stroke-width="1.8"/><rect x="14" y="3" width="7" height="5" rx="1.5" stroke="currentColor" stroke-width="1.8"/><rect x="14" y="12" width="7" height="9" rx="1.5" stroke="currentColor" stroke-width="1.8"/><rect x="3" y="16" width="7" height="5" rx="1.5" stroke="currentColor" stroke-width="1.8"/></svg><span>Admin</span></button>
-    <button data-role="pos"><svg viewBox="0 0 24 24" fill="none"><rect x="4" y="2" width="16" height="20" rx="2" stroke="currentColor" stroke-width="1.8"/><path d="M8 6h8M8 10h8M9 18h6" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg><span>Cafeteria POS</span></button>
-    <button data-role="parent"><svg viewBox="0 0 24 24" fill="none"><rect x="6" y="2" width="12" height="20" rx="3" stroke="currentColor" stroke-width="1.8"/><path d="M11 18h2" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg><span>Parent App</span></button>
+  <div class="role-switch" id="roleSwitch" role="tablist" aria-label="Switch demo role">
+    <button data-role="login" aria-label="Home"><svg viewBox="0 0 24 24" fill="none"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg><span>Home</span></button>
+    <button data-role="admin" aria-label="Admin dashboard"><svg viewBox="0 0 24 24" fill="none"><rect x="3" y="3" width="7" height="9" rx="1.5" stroke="currentColor" stroke-width="1.8"/><rect x="14" y="3" width="7" height="5" rx="1.5" stroke="currentColor" stroke-width="1.8"/><rect x="14" y="12" width="7" height="9" rx="1.5" stroke="currentColor" stroke-width="1.8"/><rect x="3" y="16" width="7" height="5" rx="1.5" stroke="currentColor" stroke-width="1.8"/></svg><span>Admin</span></button>
+    <button data-role="pos" aria-label="Cafeteria POS"><svg viewBox="0 0 24 24" fill="none"><rect x="4" y="2" width="16" height="20" rx="2" stroke="currentColor" stroke-width="1.8"/><path d="M8 6h8M8 10h8M9 18h6" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg><span>Cafeteria POS</span></button>
+    <button data-role="parent" aria-label="Parent app"><svg viewBox="0 0 24 24" fill="none"><rect x="6" y="2" width="12" height="20" rx="3" stroke="currentColor" stroke-width="1.8"/><path d="M11 18h2" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg><span>Parent App</span></button>
   </div>
   <button class="reset" id="resetBtn" title="Reset demo data">
     <svg viewBox="0 0 24 24" fill="none"><path d="M3 12a9 9 0 1 0 3-6.7L3 8m0-5v5h5" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
@@ -691,9 +692,9 @@ tbody tr:last-child td{border-bottom:none}
           </div>
           <label class="searchbox">
             <svg viewBox="0 0 24 24" fill="none"><circle cx="11" cy="11" r="7" stroke="currentColor" stroke-width="1.8"/><path d="m20 20-3-3" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>
-            <input type="text" placeholder="Search students, orders…" />
+            <input type="text" id="adminSearch" aria-label="Search students" placeholder="Search students…" />
           </label>
-          <button class="icon-btn"><span class="ping"></span><svg viewBox="0 0 24 24" fill="none"><path d="M18 8a6 6 0 1 0-12 0c0 7-3 9-3 9h18s-3-2-3-9M13.7 21a2 2 0 0 1-3.4 0" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
+          <button class="icon-btn" id="topbarBell" aria-label="View alerts"><span class="ping" id="bellPing"></span><svg viewBox="0 0 24 24" fill="none"><path d="M18 8a6 6 0 1 0-12 0c0 7-3 9-3 9h18s-3-2-3-9M13.7 21a2 2 0 0 1-3.4 0" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
         </div>
 
         <div class="admin-body">
@@ -988,6 +989,7 @@ function placeOrder(sid,cart){
   const itemsLabel=cart.map(c=>c.qty>1?`${c.name} x${c.qty}`:c.name).join(', ');
   if(stu.balance>=total){
     stu.balance-=total;
+    cart.forEach(c=>{const mi=DB.menu.find(x=>x.id===c.id);if(mi)mi.stock=Math.max(0,mi.stock-c.qty);}); // decrement stock
     DB.txns.unshift({id:Date.now(),sid,type:'buy',title:itemsLabel,amount:total,balAfter:stu.balance,time:nowTime(),day:'Today'});
     pushNotification(sid,'buy','Purchase at cafeteria',`${stu.name.split(' ')[0]} bought ${itemsLabel} (${money(total)}). Balance: ${money(stu.balance)}.`);
     // SMS + push fan-out (mirrors flowchart)
@@ -998,8 +1000,13 @@ function placeOrder(sid,cart){
     }
     return {ok:true,total,itemsLabel,balAfter:stu.balance};
   }else{
-    DB.txns.unshift({id:Date.now(),sid,type:'dec',title:itemsLabel+' (declined)',amount:total,balAfter:stu.balance,time:nowTime(),day:'Today'});
-    pushNotification(sid,'low','Order declined — low balance',`${stu.name.split(' ')[0]}'s order (${money(total)}) was declined. Balance ${money(stu.balance)} is too low. Please recharge.`);
+    // guard: don't re-log an identical decline if it's already the latest txn for this student
+    const last=DB.txns.find(t=>t.sid===sid);
+    const dup=last&&last.type==='dec'&&last.amount===total;
+    if(!dup){
+      DB.txns.unshift({id:Date.now(),sid,type:'dec',title:itemsLabel+' (declined)',amount:total,balAfter:stu.balance,time:nowTime(),day:'Today'});
+      pushNotification(sid,'low','Order declined — low balance',`${stu.name.split(' ')[0]}'s order (${money(total)}) was declined. Balance ${money(stu.balance)} is too low. Please recharge.`);
+    }
     toast({color:'rose',icon:I.x,src:'Push → Parent',title:'Order declined',body:`Insufficient balance (${money(stu.balance)} / ${money(total)}).`});
     return {ok:false,total,itemsLabel,balAfter:stu.balance};
   }
@@ -1017,7 +1024,7 @@ function addBalance(sid,amt,via='Admin top-up'){
    ============================================================ */
 function setRole(r){
   UI.role=r;
-  $$('#roleSwitch button').forEach(b=>b.classList.toggle('active',b.dataset.role===r));
+  $$('#roleSwitch button').forEach(b=>{const on=b.dataset.role===r;b.classList.toggle('active',on);b.setAttribute('aria-pressed',on);});
   $$('.stage > .view').forEach(v=>v.classList.toggle('active',v.id===r));
   window.scrollTo({top:0});
   if(r==='admin')renderAdmin();
@@ -1040,11 +1047,12 @@ function renderKPIs(){
     {c:'c1',ic:I.wallet,val:money(m.totalWallet),lbl:'Total wallet balance',d:'+8.2%',up:true},
     {c:'c2',ic:I.cash,val:money(m.todaySales),lbl:"Today's sales",d:'+12.4%',up:true},
     {c:'c3',ic:I.users,val:m.active,lbl:'Active students',d:'+3',up:true},
-    {c:'c4',ic:I.alert,val:m.lowCount,lbl:'Low-balance alerts',d:m.lowCount>2?'needs action':'ok',up:false},
+    {c:'c4',ic:I.alert,val:m.lowCount,lbl:'Low-balance alerts',d:m.lowCount>2?'needs action':'all clear',up:false,neutral:m.lowCount<=2},
   ].map(k=>`<div class="kpi ${k.c}"><div class="kpi-top"><div class="kpi-ic">${svg(k.ic)}</div>
-    <span class="delta ${k.up?'up':'down'}">${k.up?svg(I.up):''}${k.d}</span></div>
+    <span class="delta ${k.up?'up':k.neutral?'flat':'down'}">${k.up?svg(I.up):''}${k.d}</span></div>
     <div class="kpi-val mono">${k.val}</div><div class="kpi-label">${k.lbl}</div></div>`).join('');
-  $('#navAlertCount').textContent=m.lowCount;
+  const nb=$('#navAlertCount');nb.textContent=m.lowCount;nb.style.display=m.lowCount?'':'none';
+  const bp=$('#bellPing');if(bp)bp.style.display=m.lowCount?'':'none';
 }
 function renderChart(){
   const data=DB.salesWeek,labels=['Mon','Tue','Wed','Thu','Fri','Sat','Sun'];
@@ -1054,15 +1062,29 @@ function renderChart(){
   let line=data.map((v,i)=>`${i?'L':'M'}${x(i).toFixed(1)},${y(v).toFixed(1)}`).join(' ');
   let area=`M${x(0)},${H-pad} `+data.map((v,i)=>`L${x(i).toFixed(1)},${y(v).toFixed(1)}`).join(' ')+` L${x(data.length-1)},${H-pad} Z`;
   const grid=[0,.25,.5,.75,1].map(g=>{const gy=pad+g*(H-pad*2);return `<line x1="${pad}" y1="${gy}" x2="${W-pad}" y2="${gy}" stroke="#eef2f7" stroke-width="1"/>`}).join('');
-  const dots=data.map((v,i)=>`<circle cx="${x(i).toFixed(1)}" cy="${y(v).toFixed(1)}" r="4" fill="#fff" stroke="#10b981" stroke-width="2.5"><title>${labels[i]}: ${money(v)}</title></circle>`).join('');
+  const dots=data.map((v,i)=>`<circle cx="${x(i).toFixed(1)}" cy="${y(v).toFixed(1)}" r="4" fill="#fff" stroke="#4f46e5" stroke-width="2.5"><title>${labels[i]}: ${money(v)}</title></circle>`).join('');
   const xl=labels.map((l,i)=>`<text x="${x(i).toFixed(1)}" y="${H-8}" text-anchor="middle" font-size="11" fill="#94a3b8" font-weight="600">${l}</text>`).join('');
   $('#chartArea').innerHTML=`<svg viewBox="0 0 ${W} ${H}" style="width:100%;height:auto;overflow:visible">
-    <defs><linearGradient id="ag" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#10b981" stop-opacity=".22"/><stop offset="1" stop-color="#10b981" stop-opacity="0"/></linearGradient></defs>
-    ${grid}<path d="${area}" fill="url(#ag)"/><path d="${line}" fill="none" stroke="#10b981" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>${dots}${xl}</svg>
-    <div class="legend"><div class="lg"><span class="sw" style="background:#10b981"></span>Weekly revenue <b>${money(data.reduce((a,b)=>a+b,0))}</b></div><div class="lg"><span class="sw" style="background:#cbd5e1"></span>Peak <b>${money(Math.max(...data))}</b> (Fri)</div></div>`;
+    <defs><linearGradient id="ag" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#4f46e5" stop-opacity=".22"/><stop offset="1" stop-color="#4f46e5" stop-opacity="0"/></linearGradient></defs>
+    ${grid}<path d="${area}" fill="url(#ag)"/><path d="${line}" fill="none" stroke="#4f46e5" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>${dots}${xl}</svg>
+    <div class="legend"><div class="lg"><span class="sw" style="background:#4f46e5"></span>Weekly revenue <b>${money(data.reduce((a,b)=>a+b,0))}</b></div><div class="lg"><span class="sw" style="background:#cbd5e1"></span>Peak <b>${money(Math.max(...data))}</b> (Fri)</div></div>`;
+}
+function liveCatMix(){
+  const COL={Lunch:'#10b981',Snacks:'#6366f1',Beverages:'#0ea5e9',Breakfast:'#f59e0b'};
+  const name2cat={};DB.menu.forEach(m=>name2cat[m.name]=m.cat);
+  const count={Lunch:0,Snacks:0,Beverages:0,Breakfast:0};let tot=0;
+  DB.txns.filter(t=>t.day==='Today'&&t.type==='buy').forEach(t=>{
+    t.title.split(',').forEach(part=>{
+      const mq=part.trim().match(/^(.*?)(?:\sx(\d+))?$/);
+      const nm=mq[1].trim(),q=+(mq[2]||1),cat=name2cat[nm];
+      if(cat){count[cat]+=q;tot+=q;}
+    });
+  });
+  if(!tot)return DB.catMix; // fallback to baseline before any activity
+  return Object.keys(count).filter(k=>count[k]>0).map(k=>({k,v:Math.round(count[k]/tot*100),c:COL[k]}));
 }
 function renderDonut(){
-  const data=DB.catMix,R=70,C=2*Math.PI*R;let off=0;
+  const data=liveCatMix(),R=70,C=2*Math.PI*R;let off=0;
   const segs=data.map(d=>{const len=C*d.v/100;const s=`<circle cx="90" cy="90" r="${R}" fill="none" stroke="${d.c}" stroke-width="22" stroke-dasharray="${len.toFixed(2)} ${(C-len).toFixed(2)}" stroke-dashoffset="${(-off).toFixed(2)}" transform="rotate(-90 90 90)" stroke-linecap="butt"/>`;off+=len;return s;}).join('');
   const leg=data.map(d=>`<div class="lg"><span class="sw" style="background:${d.c}"></span>${d.k} <b>${d.v}%</b></div>`).join('');
   $('#donutArea').innerHTML=`<div style="display:flex;align-items:center;gap:18px;flex-wrap:wrap"><div style="position:relative;flex:none"><svg width="180" height="180" viewBox="0 0 180 180">${segs}</svg>
@@ -1089,9 +1111,11 @@ function renderLowBal(){
     :'<div class="empty-mini">🎉 All students above ₹100.</div>';
 }
 function renderStudents(){
-  $('#gradeChips').innerHTML=['All',6,7,8,9,10,11,12].map(g=>`<button class="chip ${UI.gradeFilter==g?'active':''}" data-grade="${g}">${g==='All'?'All grades':'Grade '+g}</button>`).join('');
+  $('#gradeChips').innerHTML=['All',6,7,8,9,10,11,12].map(g=>`<button class="chip ${UI.gradeFilter==g?'active':''}" data-grade="${g}" aria-pressed="${UI.gradeFilter==g}">${g==='All'?'All grades':'Grade '+g}</button>`).join('');
   let list=DB.students.slice().sort((a,b)=>a.name.localeCompare(b.name));
   if(UI.gradeFilter!=='All')list=list.filter(s=>s.grade==UI.gradeFilter);
+  const q=(UI.studentSearch||'').trim().toLowerCase();
+  if(q)list=list.filter(s=>s.name.toLowerCase().includes(q)||s.id.toLowerCase().includes(q));
   $('#studentRows').innerHTML=list.map(s=>{
     const last=DB.txns.find(t=>t.sid===s.id&&t.type==='buy');
     const low=s.balance<LOW;
@@ -1105,14 +1129,14 @@ function renderStudents(){
 }
 function renderMenuMgmt(){
   const cats=['All','Breakfast','Lunch','Snacks','Beverages'];
-  $('#menuCatChips').innerHTML=cats.map(c=>`<button class="chip ${UI.menuCat===c?'active':''}" data-menucat="${c}">${c}</button>`).join('');
+  $('#menuCatChips').innerHTML=cats.map(c=>`<button class="chip ${UI.menuCat===c?'active':''}" data-menucat="${c}" aria-pressed="${UI.menuCat===c}">${c}</button>`).join('');
   let items=DB.menu.filter(m=>UI.menuCat==='All'||m.cat===UI.menuCat);
   $('#menuMgmt').innerHTML=items.map(m=>`<div class="menu-card">
     <div class="pic">${m.em}<span class="cat badge badge-slate">${m.cat}</span>${m.stock<=0?'<span class="stock badge badge-rose">Out</span>':m.stock<8?`<span class="stock badge badge-amber">${m.stock} left</span>`:''}</div>
     <div class="mc-body"><div class="name"><span>${m.name}</span><span class="price">${money(m.price)}</span></div>
     <div class="tags">${m.tags.map(t=>`<span class="badge ${t.includes('kcal')?'badge-slate':t==='Veg'||t==='Vegan'?'badge-green':'badge-amber'}">${t}</span>`).join('')}</div>
     <div class="mc-foot"><span style="font-size:12px;color:var(--ink-mute)">Stock: <b>${m.stock}</b></span>
-    <div class="toggle">${m.on?'Available':'Hidden'}<span class="switch ${m.on?'on':''}" data-action="toggle-menu" data-id="${m.id}"></span></div></div></div></div>`).join('');
+    <div class="toggle"><span id="sw-lbl-${m.id}">${m.on?'Available':'Hidden'}</span><button type="button" role="switch" aria-checked="${m.on}" aria-labelledby="sw-lbl-${m.id}" class="switch ${m.on?'on':''}" data-action="toggle-menu" data-id="${m.id}"></button></div></div></div></div>`).join('');
 }
 function renderReports(){
   const m=adminMetrics();
@@ -1142,7 +1166,7 @@ function renderAdmin(){
 }
 function setAdminPage(p){
   UI.adminPage=p;
-  $$('.nav-item').forEach(n=>n.classList.toggle('active',n.dataset.page===p));
+  $$('.nav-item').forEach(n=>{const on=n.dataset.page===p;n.classList.toggle('active',on);n.setAttribute('aria-current',on?'page':'false');});
   $$('.admin-page').forEach(pg=>pg.classList.toggle('active',pg.dataset.page===p));
   const titles={dashboard:['Dashboard','Tuesday, 25 June · Greenfield International School'],students:['Students','Manage wallets grade-wise'],menu:['Menu management','Pictures, pricing, stock & availability'],reports:['Reports','Sales & revenue · export PDF / Excel'],alerts:['Alerts','Notification log']};
   $('#adminTitle').textContent=titles[p][0];$('#adminCrumb').textContent=titles[p][1];
@@ -1154,7 +1178,7 @@ function setAdminPage(p){
    ============================================================ */
 function renderPOSCats(){
   const cats=['Breakfast','Lunch','Snacks','Beverages'];const em={Breakfast:'🌅',Lunch:'🍱',Snacks:'🥪',Beverages:'🥤'};
-  $('#posCatTabs').innerHTML=cats.map(c=>`<button class="cat-tab ${UI.posCat===c?'active':''}" data-poscat="${c}"><span class="em">${em[c]}</span>${c}</button>`).join('');
+  $('#posCatTabs').innerHTML=cats.map(c=>`<button class="cat-tab ${UI.posCat===c?'active':''}" data-poscat="${c}" aria-pressed="${UI.posCat===c}"><span class="em">${em[c]}</span>${c}</button>`).join('');
 }
 function renderPOSItems(){
   const items=DB.menu.filter(m=>m.cat===UI.posCat);
@@ -1180,7 +1204,7 @@ function renderPOSStudent(){
   el.innerHTML=`<div class="student-card">
     <div class="sc-top"><div class="sc-av">${initials(s.name)}</div>
       <div class="sc-name"><b>${s.name}</b><small>Grade ${s.grade} · ${s.id}</small></div>
-      <button style="margin-left:auto;color:#fff;opacity:.8" data-action="clear-student" title="Change student">${svg(I.x)}</button></div>
+      <button style="margin-left:auto;color:#fff;opacity:.8" data-action="clear-student" aria-label="Change student" title="Change student">${svg(I.x)}</button></div>
     <div class="sc-bal"><div><div class="lbl">WALLET BALANCE</div><div class="num mono">${money(s.balance)}</div></div>${low?'<span class="badge" style="background:#fff;color:var(--rose-600)"><span class="dot"></span>Low</span>':''}</div>
     ${s.allergy?`<div class="sc-allergy">${svg(I.alert)} Allergy: ${s.allergy}</div>`:''}</div>`;
 }
@@ -1203,13 +1227,14 @@ function renderCart(){
     <div class="row"><span>Taxes</span><span class="mono">Included</span></div>
     <div class="row total"><span>Total</span><span class="mono">${money(total)}</span></div>
     ${stu?`<div class="bal-after ${short?'short':''}">${short?`⚠ Short by ${money(total-stu.balance)} — order will be declined`:`Balance after: ${money(stu.balance-total)}`}</div>`:'<div class="bal-after">Scan a student to charge this order</div>'}
-    <button class="btn btn-primary btn-block btn-lg" data-action="confirm-order" ${!stu?'disabled':''}>${stu?'Confirm & charge '+money(total):'Scan student first'}</button>`;
+    <button class="btn btn-primary btn-block btn-lg ${short?'btn-warn':''}" data-action="confirm-order" ${!stu?'disabled':''}>${!stu?'Scan student first':short?'Charge anyway — will decline':'Confirm & charge '+money(total)}</button>`;
 }
 function renderPOS(){renderPOSCats();renderPOSItems();renderQuickStudents();renderPOSStudent();renderCart();}
 
 function addToCart(id){
   const m=DB.menu.find(x=>x.id===id);if(!m||!m.on||m.stock<=0)return;
   const ex=UI.posCart.find(c=>c.id===id);
+  if(ex&&ex.qty>=m.stock){toast({color:'amber',icon:I.alert,title:'Stock limit',body:`Only ${m.stock} × ${m.name} left.`});return;}
   if(ex)ex.qty++;else UI.posCart.push({id:m.id,name:m.name,price:m.price,em:m.em,qty:1});
   renderPOSItems();renderCart();
 }
@@ -1221,8 +1246,14 @@ function decFromCart(id){
 function pickStudent(id){UI.posStudent=id;renderPOSStudent();renderCart();}
 function scanGo(){
   const q=$('#scanInput').value.trim().toLowerCase();if(!q)return;
-  const s=DB.students.find(x=>x.id.toLowerCase()===q||x.name.toLowerCase().includes(q));
-  if(s){pickStudent(s.id);$('#scanInput').value='';}
+  const exact=DB.students.find(x=>x.id.toLowerCase()===q||x.name.toLowerCase()===q);
+  if(exact){pickStudent(exact.id);$('#scanInput').value='';return;}
+  const matches=DB.students.filter(x=>x.name.toLowerCase().includes(q)||x.id.toLowerCase().includes(q));
+  if(matches.length===1){pickStudent(matches[0].id);$('#scanInput').value='';}
+  else if(matches.length>1){
+    $('#cartStudent').innerHTML=`<div style="margin:14px 22px 0"><div style="font-size:12px;color:var(--ink-mute);font-weight:600;margin-bottom:8px">${matches.length} matches — pick one:</div>
+      <div class="quick-students">${matches.slice(0,6).map(s=>`<button class="qs" data-action="pick-student" data-id="${s.id}">${s.name} <span class="muted">${s.id}</span></button>`).join('')}</div></div>`;
+  }
   else toast({color:'rose',icon:I.x,title:'Student not found',body:`No match for "${q}". Try an ID like STU-04.`});
 }
 function confirmOrder(){
@@ -1314,7 +1345,7 @@ function renderParentRecharge(){
   const child=studentById(UI.parentChild);
   const amts=[100,200,500,1000,1500,2000];
   const methods=[{k:'upi',em:'📲',n:'UPI',d:'GPay, PhonePe, Paytm'},{k:'card',em:'💳',n:'Debit / Credit card',d:'Visa, Mastercard, RuPay'},{k:'nb',em:'🏦',n:'Net banking',d:'All major banks'}];
-  $('#pRecharge').innerHTML=`<div style="padding:18px 20px 6px"><div style="display:flex;align-items:center;gap:10px"><button data-pgo="home" style="color:var(--ink-soft)">${svg('<path d="M15 18l-6-6 6-6" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"/>')}</button><h4 style="font-size:18px">Recharge wallet</h4></div>
+  $('#pRecharge').innerHTML=`<div style="padding:18px 20px 6px"><div style="display:flex;align-items:center;gap:10px"><button data-pgo="home" aria-label="Back to home" style="color:var(--ink-soft)">${svg(I.back)}</button><h4 style="font-size:18px">Recharge wallet</h4></div>
     <p class="muted" style="font-size:12.5px;margin-top:6px">${child.name} · current ${money(child.balance)}</p></div>
   <div style="padding:8px 20px 18px">
     <label style="font-size:12.5px;font-weight:600;color:var(--ink-soft)">Select amount</label>
@@ -1332,23 +1363,49 @@ function renderParent(){
   $('#pClock').textContent=clockStr();
 }
 function setParentTab(t){
-  UI.parentTab=t;
+  const prev=UI.parentTab;UI.parentTab=t;
+  // keep "new" highlight visible while viewing alerts; mark read only when leaving the tab
+  if(prev==='notifs'&&t!=='notifs')childNotifs().forEach(n=>n.unread=false);
+  renderParent();
   $$('.p-view').forEach(v=>v.classList.toggle('active',v.dataset.pview===t));
-  $$('.p-tab').forEach(b=>b.classList.toggle('active',b.dataset.pgo===t));
+  $$('.p-tab').forEach(b=>{const on=b.dataset.pgo===t;b.classList.toggle('active',on);b.setAttribute('aria-current',on?'page':'false');});
   $('#pScreen').scrollTop=0;
-  if(t==='notifs'){childNotifs().forEach(n=>n.unread=false);renderParent();}
 }
 
 /* ============================================================
-   MODALS
+   MODALS  (accessible dialog: focus-in, trap, focus-return)
    ============================================================ */
-function openModal(html){$('#modalInner').innerHTML=html;$('#modalRoot').classList.add('show');}
-function closeModal(){$('#modalRoot').classList.remove('show');}
+let _lastFocus=null;
+function openModal(html){
+  _lastFocus=document.activeElement;
+  $('#modalInner').innerHTML=html;
+  $('#modalRoot').classList.add('show');
+  $('.stage').setAttribute('aria-hidden','true');
+  const dlg=$('#modalInner .modal');
+  if(dlg){dlg.setAttribute('role','dialog');dlg.setAttribute('aria-modal','true');
+    const h=dlg.querySelector('h3');if(h){h.id=h.id||'modalTitle';dlg.setAttribute('aria-labelledby',h.id);}
+    const focusables=dlg.querySelectorAll('input,button,select,textarea,[tabindex]');
+    (dlg.querySelector('input')||focusables[0])?.focus();
+  }
+}
+function closeModal(){
+  $('#modalRoot').classList.remove('show');
+  $('#modalInner').innerHTML='';
+  $('.stage').removeAttribute('aria-hidden');
+  if(_lastFocus&&_lastFocus.focus)_lastFocus.focus();
+}
 $('#modalRoot').addEventListener('click',e=>{if(e.target.id==='modalRoot')closeModal();});
-document.addEventListener('keydown',e=>{if(e.key==='Escape')closeModal();});
+document.addEventListener('keydown',e=>{if(e.key==='Escape'&&$('#modalRoot').classList.contains('show'))closeModal();});
+$('#modalRoot').addEventListener('keydown',e=>{
+  if(e.key!=='Tab')return;
+  const f=[...$('#modalInner').querySelectorAll('input,button,select,textarea,[tabindex]:not([tabindex="-1"])')].filter(el=>!el.disabled&&el.offsetParent!==null);
+  if(!f.length)return;const first=f[0],last=f[f.length-1];
+  if(e.shiftKey&&document.activeElement===first){e.preventDefault();last.focus();}
+  else if(!e.shiftKey&&document.activeElement===last){e.preventDefault();first.focus();}
+});
 
 function openAddBalance(presetId){
-  openModal(`<div class="modal"><div class="modal-head"><div><h3>Add wallet balance</h3><p>Search a student by name or ID, then top up.</p></div><button class="x" data-action="close-modal">${svg(I.x)}</button></div>
+  openModal(`<div class="modal"><div class="modal-head"><div><h3>Add wallet balance</h3><p>Search a student by name or ID, then top up.</p></div><button class="x" data-action="close-modal" aria-label="Close dialog">${svg(I.x)}</button></div>
     <div class="modal-body">
       <div class="field"><label>Find student</label><div class="control">${svg('<circle cx="11" cy="11" r="7" stroke="currentColor" stroke-width="1.8" fill="none"/><path d="m20 20-3-3" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/>','')}<input type="text" id="mbSearch" placeholder="e.g. Diya or STU-02" value="${presetId?studentById(presetId).name:''}" autocomplete="off"/></div></div>
       <div id="mbResult"></div>
@@ -1463,6 +1520,9 @@ document.addEventListener('keydown',e=>{
   if(e.key==='Enter'&&e.target.id==='scanInput'){scanGo();}
   if(e.key==='Enter'&&e.target.id==='mbAmt'){const b=$('#mbConfirm');if(!b.disabled)b.click();}
 });
+// admin topbar: bell -> alerts, live student search
+$('#topbarBell').addEventListener('click',()=>setAdminPage('alerts'));
+$('#adminSearch').addEventListener('input',e=>{UI.studentSearch=e.target.value;if(UI.adminPage!=='students')setAdminPage('students');renderStudents();});
 
 /* ============================================================
    INIT
