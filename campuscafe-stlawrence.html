@@ -1,0 +1,1627 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>St. Lawrence International School · Campus Café — Cafeteria & Wallet Management</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Instrument+Sans:wght@400;500;600;700&family=Sora:wght@600;700;800&family=Marcellus&display=swap" rel="stylesheet" />
+<style>
+/* ============================================================
+   Campus Café · St. Lawrence International School, Mysuru
+   Design system — "Laurel & Brass"
+   Anchored on the school's own identity (deep laurel green,
+   #2f4f4f masthead) with an engraved-brass accent.
+   ============================================================ */
+:root{
+  /* brand — St. Lawrence laurel green */
+  --brand-50:#edf3ef; --brand-100:#dbe8e0; --brand-200:#bad4c5;
+  --brand-300:#8fb8a2; --brand-400:#5c9679; --brand-500:#35755a;
+  --brand-600:#245c46; --brand-700:#1b4936; --brand-800:#143a2b;
+  /* brass / gold — crest accent (mapped over legacy indigo slots) */
+  --indigo-500:#c9a227; --indigo-600:#a8851c; --indigo-50:#fbf5e0;
+  --gold-50:#fbf5e0; --gold-100:#f4e8c2; --gold-400:#d9b44a;
+  --gold-500:#c9a227; --gold-600:#a8851c; --gold-700:#8a6d14;
+  /* money / positive — emerald (semantic only) */
+  --mint-50:#eaf7ef; --mint-100:#d2eedd; --mint-500:#199d63; --mint-600:#0f7f4e; --mint-700:#0b6740;
+  --violet-500:#c9a227; --violet-600:#a8851c;
+  --amber-50:#fdf6e8; --amber-100:#faeccb; --amber-500:#dd930f; --amber-600:#bd7708; --amber-700:#985e08;
+  --rose-50:#fdf0f0; --rose-100:#fbdfdf; --rose-500:#d94f4f; --rose-600:#bd3a3a; --rose-700:#9c2c2c;
+  --sky-50:#ebf4f6; --sky-500:#2e7f94; --sky-600:#22677a;
+  /* neutrals — greened greys, warm paper */
+  --slate-50:#f6f7f4; --slate-100:#eceee8; --slate-200:#dde1d8; --slate-300:#c4ccc2;
+  --slate-400:#93a097; --slate-500:#68786d; --slate-600:#485a4f; --slate-700:#34453b;
+  --slate-800:#20332a; --slate-900:#152922; --slate-950:#0b1a14;
+  /* semantic */
+  --bg:#f3f4ef; --surface:#ffffff; --ink:#152420; --ink-soft:#46584f; --ink-mute:#68786d;
+  --line:#e5e8df; --line-strong:#d3d9cd;
+  --radius:16px; --radius-sm:11px; --radius-lg:20px; --radius-xl:26px;
+  --shadow-xs:0 1px 2px rgba(18,36,29,.06);
+  --shadow-sm:0 1px 3px rgba(18,36,29,.08),0 1px 2px rgba(18,36,29,.04);
+  --shadow-md:0 6px 18px -4px rgba(18,36,29,.13),0 2px 6px rgba(18,36,29,.06);
+  --shadow-lg:0 20px 45px -12px rgba(18,36,29,.24),0 6px 14px rgba(18,36,29,.08);
+  --shadow-brand:0 12px 28px -8px rgba(27,73,54,.42);
+  --shadow-gold:0 10px 24px -8px rgba(168,133,28,.45);
+  --ring:0 0 0 3px rgba(53,117,90,.30);
+  --ease:cubic-bezier(.22,.61,.36,1);
+  --font:'Instrument Sans',system-ui,-apple-system,Segoe UI,Roboto,sans-serif;
+  --display:'Sora','Instrument Sans',system-ui,sans-serif;
+  --serif:'Marcellus',Georgia,'Times New Roman',serif;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{height:100%}
+body{
+  font-family:var(--font);
+  color:var(--ink);
+  background:var(--bg);
+  -webkit-font-smoothing:antialiased;
+  text-rendering:optimizeLegibility;
+  overflow-x:hidden;
+}
+button{font-family:inherit;cursor:pointer;border:none;background:none;color:inherit}
+input,select{font-family:inherit}
+h1,h2,h3,h4{font-family:var(--display);letter-spacing:-.02em;line-height:1.15}
+::-webkit-scrollbar{width:10px;height:10px}
+::-webkit-scrollbar-thumb{background:var(--slate-300);border-radius:99px;border:3px solid transparent;background-clip:content-box}
+::-webkit-scrollbar-thumb:hover{background:var(--slate-400);background-clip:content-box}
+:focus-visible{outline:none;box-shadow:var(--ring);border-radius:8px}
+.mono{font-variant-numeric:tabular-nums}
+
+/* ---------- Top demo bar ---------- */
+.demobar{
+  position:sticky;top:0;z-index:50;
+  display:flex;align-items:center;gap:18px;
+  padding:0 20px;height:60px;
+  background:linear-gradient(120deg,#0f241d,#173428 62%,#14322a);
+  color:#eaf2ec;
+  border-bottom:1px solid var(--gold-600);
+  box-shadow:0 1px 0 rgba(255,255,255,.05) inset,0 -2px 0 rgba(201,162,39,.35) inset;
+}
+.demobar .brand{display:flex;align-items:center;gap:12px}
+.demobar .brand .word{display:flex;flex-direction:column;line-height:1.12}
+.demobar .brand .word b{font-family:var(--serif);font-weight:400;font-size:16.5px;letter-spacing:.02em;color:#f4f1e4;white-space:nowrap}
+.demobar .brand .word small{font-size:9.5px;font-weight:700;letter-spacing:.22em;text-transform:uppercase;color:var(--gold-400)}
+.demobar .logo{width:36px;height:36px;border-radius:11px;display:grid;place-items:center;background:radial-gradient(120% 120% at 30% 20%,#2a5a46,#173428 70%);box-shadow:0 0 0 1px rgba(201,162,39,.55),0 6px 16px -6px rgba(0,0,0,.5)}
+.demobar .tag{font-size:10.5px;font-weight:700;color:var(--gold-400);background:rgba(201,162,39,.13);border:1px solid rgba(201,162,39,.32);padding:3px 10px;border-radius:99px;letter-spacing:.06em;text-transform:uppercase}
+.role-switch{display:flex;gap:4px;background:rgba(255,255,255,.06);padding:4px;border-radius:12px;margin-left:auto}
+.role-switch button{
+  display:flex;align-items:center;gap:7px;padding:7px 14px;border-radius:9px;
+  font-size:13px;font-weight:600;color:#a8c2b3;transition:.18s var(--ease)
+}
+.role-switch button svg{width:15px;height:15px}
+.role-switch button:hover{color:#eaf2ec;background:rgba(255,255,255,.06)}
+.role-switch button.active{background:#f6f3e7;color:var(--brand-700);box-shadow:var(--shadow-sm)}
+.demobar .reset{display:flex;align-items:center;gap:6px;font-size:12.5px;font-weight:600;color:#a8c2b3;padding:7px 11px;border-radius:9px;transition:.18s}
+.demobar .reset:hover{color:#fff;background:rgba(255,255,255,.08)}
+.demobar .reset svg{width:14px;height:14px}
+
+/* ---------- shared atoms ---------- */
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;font-weight:600;font-size:14px;padding:10px 16px;border-radius:11px;transition:.16s var(--ease);white-space:nowrap}
+.btn svg{width:16px;height:16px}
+.btn-primary{background:linear-gradient(135deg,var(--brand-500),var(--brand-600));color:#fff;box-shadow:var(--shadow-brand)}
+.btn-primary:hover{filter:brightness(1.05);transform:translateY(-1px)}
+.btn-primary:active{transform:translateY(0)}
+.btn-ghost{background:var(--surface);color:var(--ink-soft);border:1px solid var(--line-strong);box-shadow:var(--shadow-xs)}
+.btn-ghost:hover{background:var(--slate-50);color:var(--ink);border-color:var(--slate-300)}
+.btn-dark{background:var(--slate-900);color:#fff}
+.btn-dark:hover{background:var(--slate-800)}
+.btn-block{width:100%}
+.btn-lg{padding:14px 20px;font-size:15px;border-radius:13px}
+.btn:disabled{opacity:.5;cursor:not-allowed;transform:none!important}
+
+.badge{display:inline-flex;align-items:center;gap:5px;font-size:11.5px;font-weight:600;padding:3px 9px;border-radius:99px;line-height:1.4}
+.badge .dot{width:6px;height:6px;border-radius:99px;background:currentColor}
+.badge-green{background:var(--mint-50);color:var(--mint-700)}
+.badge-amber{background:var(--amber-50);color:var(--amber-700)}
+.badge-rose{background:var(--rose-50);color:var(--rose-700)}
+.badge-sky{background:var(--sky-50);color:var(--sky-600)}
+.badge-slate{background:var(--slate-100);color:var(--slate-600)}
+.badge-indigo{background:var(--indigo-50);color:var(--indigo-600)}
+
+.avatar{width:38px;height:38px;border-radius:11px;display:grid;place-items:center;font-weight:700;font-size:14px;color:#fff;flex:none;font-family:var(--display)}
+.card{background:var(--surface);border:1px solid var(--line);border-radius:var(--radius);box-shadow:var(--shadow-sm)}
+
+/* ---------- app frames ---------- */
+.stage{min-height:calc(100vh - 60px)}
+.view{display:none}
+.view.active{display:block;animation:fade .35s var(--ease)}
+@keyframes fade{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:none}}
+
+/* ============================================================
+   LOGIN / LANDING
+   ============================================================ */
+#login{min-height:calc(100vh - 60px);display:grid;place-items:center;padding:48px 24px;
+  background:radial-gradient(1100px 560px at 82% -12%,#dcebe0 0,transparent 55%),
+             radial-gradient(880px 480px at -8% 112%,#f2ecd6 0,transparent 50%),var(--bg)}
+.login-wrap{width:100%;max-width:980px}
+.login-head{text-align:center;margin-bottom:38px}
+.login-head .mark{width:66px;height:66px;border-radius:19px;margin:0 auto 16px;display:grid;place-items:center;background:radial-gradient(120% 120% at 30% 18%,#2a5a46,#173428 72%);box-shadow:0 0 0 1px rgba(201,162,39,.5),var(--shadow-brand)}
+.school-eyebrow{font-size:12px;font-weight:700;letter-spacing:.18em;text-transform:uppercase;color:var(--gold-600);margin-bottom:12px}
+.login-head h1{font-family:var(--serif);font-weight:400;font-size:44px;letter-spacing:.01em;margin-bottom:14px;color:var(--brand-800)}
+.gold-rule{width:64px;height:3px;margin:0 auto 16px;border-radius:99px;background:linear-gradient(90deg,var(--gold-400),var(--gold-600))}
+.login-head p{color:var(--ink-soft);font-size:16px;max-width:520px;margin:0 auto;line-height:1.6}
+.login-head .pills{display:flex;gap:8px;justify-content:center;flex-wrap:wrap;margin-top:18px}
+.role-cards{display:grid;grid-template-columns:repeat(3,1fr);gap:20px}
+.role-card{background:var(--surface);border:1px solid var(--line);border-radius:var(--radius-lg);padding:28px 24px;text-align:left;box-shadow:var(--shadow-sm);transition:.22s var(--ease);position:relative;overflow:hidden}
+.role-card:hover{transform:translateY(-6px);box-shadow:var(--shadow-lg);border-color:var(--brand-200)}
+.role-card::after{content:'';position:absolute;inset:0;background:linear-gradient(180deg,transparent 60%,rgba(16,185,129,.05));opacity:0;transition:.22s}
+.role-card:hover::after{opacity:1}
+.role-card .ic{width:54px;height:54px;border-radius:15px;display:grid;place-items:center;margin-bottom:18px}
+.role-card .ic svg{width:26px;height:26px;color:#fff}
+.role-card.admin .ic{background:linear-gradient(135deg,var(--indigo-500),var(--indigo-600))}
+.role-card.pos .ic{background:linear-gradient(135deg,var(--brand-400),var(--brand-600))}
+.role-card.parent .ic{background:linear-gradient(135deg,var(--sky-500),var(--sky-600))}
+.role-card h3{font-size:19px;margin-bottom:7px}
+.role-card p{color:var(--ink-soft);font-size:13.5px;line-height:1.55;margin-bottom:18px}
+.role-card .enter{display:flex;align-items:center;gap:7px;font-weight:700;font-size:13.5px;color:var(--brand-700)}
+.role-card .enter svg{width:16px;height:16px;transition:.2s}
+.role-card:hover .enter svg{transform:translateX(4px)}
+.login-foot{text-align:center;margin-top:34px;color:var(--ink-mute);font-size:13px}
+
+/* ============================================================
+   ADMIN DASHBOARD
+   ============================================================ */
+.admin-shell{display:grid;grid-template-columns:248px 1fr;min-height:calc(100vh - 60px)}
+.sidebar{background:var(--slate-900);color:#b9c6bd;display:flex;flex-direction:column;padding:22px 16px;position:sticky;top:60px;height:calc(100vh - 60px)}
+.sidebar .s-brand{display:flex;align-items:center;gap:11px;padding:4px 8px 20px;border-bottom:1px solid rgba(201,162,39,.18);margin-bottom:6px}
+.sidebar .s-brand .logo{width:36px;height:36px;border-radius:11px;display:grid;place-items:center;background:radial-gradient(120% 120% at 30% 20%,#2a5a46,#173428 70%);box-shadow:0 0 0 1px rgba(201,162,39,.45)}
+.sidebar .s-brand b{font-family:var(--serif);font-weight:400;font-size:18px;color:#f4f1e4;letter-spacing:.02em}
+.sidebar .s-brand small{display:block;font-size:10.5px;color:var(--slate-500);font-weight:600;letter-spacing:.03em}
+.nav-label{font-size:10.5px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--slate-500);padding:14px 12px 6px}
+.nav-item{display:flex;align-items:center;gap:12px;padding:10px 12px;border-radius:10px;font-size:14px;font-weight:500;color:#b9c6bd;transition:.16s;width:100%;text-align:left;margin-bottom:2px}
+.nav-item svg{width:18px;height:18px;flex:none;opacity:.85}
+.nav-item:hover{background:rgba(255,255,255,.06);color:#fff}
+.nav-item.active{background:linear-gradient(135deg,rgba(201,162,39,.20),rgba(201,162,39,.07));color:#fff;box-shadow:inset 0 0 0 1px rgba(201,162,39,.30),inset 3px 0 0 var(--gold-500)}
+.nav-item.active svg{opacity:1;color:var(--gold-400)}
+.nav-item .nav-count{margin-left:auto;font-size:11px;font-weight:700;background:var(--rose-500);color:#fff;border-radius:99px;padding:1px 7px}
+.sidebar .s-user{margin-top:auto;display:flex;align-items:center;gap:11px;padding:12px;border-radius:12px;background:rgba(255,255,255,.05)}
+.sidebar .s-user .info b{display:block;font-size:13px;color:#fff;font-weight:600}
+.sidebar .s-user .info small{font-size:11.5px;color:var(--slate-400)}
+
+.admin-main{min-width:0;display:flex;flex-direction:column}
+.topbar{display:flex;align-items:center;gap:16px;padding:18px 30px;background:var(--surface);border-bottom:1px solid var(--line);position:sticky;top:60px;z-index:20}
+.topbar h2{font-size:20px}
+.topbar .crumb{color:var(--ink-mute);font-size:13px;font-weight:500;margin-top:2px}
+.searchbox{margin-left:auto;display:flex;align-items:center;gap:9px;background:var(--slate-50);border:1px solid var(--line-strong);border-radius:11px;padding:9px 13px;width:260px;color:var(--ink-mute);transition:.16s}
+.searchbox:focus-within{border-color:var(--brand-300);background:#fff;box-shadow:var(--ring)}
+.searchbox svg{width:16px;height:16px;flex:none}
+.searchbox input{border:none;background:none;outline:none;font-size:13.5px;width:100%;color:var(--ink)}
+.icon-btn{width:40px;height:40px;border-radius:11px;display:grid;place-items:center;color:var(--ink-soft);background:var(--slate-50);border:1px solid var(--line-strong);position:relative;transition:.16s}
+.icon-btn:hover{background:#fff;color:var(--ink);box-shadow:var(--shadow-xs)}
+.icon-btn svg{width:18px;height:18px}
+.icon-btn .ping{position:absolute;top:8px;right:9px;width:8px;height:8px;background:var(--rose-500);border-radius:99px;border:2px solid var(--surface)}
+.admin-body{padding:28px 30px;flex:1;overflow:auto}
+.admin-page{display:none}
+.admin-page.active{display:block;animation:fade .3s var(--ease)}
+
+.kpi-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:18px;margin-bottom:24px}
+.kpi{background:var(--surface);border:1px solid var(--line);border-radius:var(--radius);padding:20px;box-shadow:var(--shadow-sm);position:relative;overflow:hidden;transition:.2s var(--ease)}
+.kpi:hover{box-shadow:var(--shadow-md);transform:translateY(-2px)}
+.kpi .kpi-top{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:14px}
+.kpi .kpi-ic{width:42px;height:42px;border-radius:12px;display:grid;place-items:center}
+.kpi .kpi-ic svg{width:20px;height:20px;color:#fff}
+.kpi.c1 .kpi-ic{background:linear-gradient(135deg,var(--brand-400),var(--brand-600))}
+.kpi.c2 .kpi-ic{background:linear-gradient(135deg,var(--indigo-500),var(--indigo-600))}
+.kpi.c3 .kpi-ic{background:linear-gradient(135deg,var(--sky-500),var(--sky-600))}
+.kpi.c4 .kpi-ic{background:linear-gradient(135deg,var(--amber-500),var(--amber-600))}
+.kpi .delta{font-size:12px;font-weight:700;display:flex;align-items:center;gap:3px}
+.kpi .delta svg{width:13px;height:13px}
+.kpi .delta.up{color:var(--brand-600)} .kpi .delta.down{color:var(--rose-600)}
+.kpi .kpi-val{font-family:var(--display);font-size:28px;font-weight:800;letter-spacing:-.02em}
+.kpi .kpi-label{font-size:13px;color:var(--ink-soft);font-weight:500;margin-top:3px}
+
+.grid-2{display:grid;grid-template-columns:1.7fr 1fr;gap:18px;margin-bottom:24px}
+.panel{background:var(--surface);border:1px solid var(--line);border-radius:var(--radius);box-shadow:var(--shadow-sm)}
+.panel-head{display:flex;align-items:center;justify-content:space-between;padding:18px 20px 0}
+.panel-head h3{font-size:16px}
+.panel-head .sub{font-size:12.5px;color:var(--ink-mute);margin-top:2px}
+.panel-body{padding:18px 20px}
+.seg{display:flex;gap:2px;background:var(--slate-100);padding:3px;border-radius:9px}
+.seg button{font-size:12px;font-weight:600;color:var(--ink-soft);padding:5px 11px;border-radius:7px;transition:.15s}
+.seg button.active{background:#fff;color:var(--ink);box-shadow:var(--shadow-xs)}
+
+.legend{display:flex;gap:18px;flex-wrap:wrap;margin-top:8px}
+.legend .lg{display:flex;align-items:center;gap:7px;font-size:12.5px;color:var(--ink-soft);font-weight:500}
+.legend .lg b{color:var(--ink);font-weight:700}
+.legend .sw{width:11px;height:11px;border-radius:4px}
+
+.alert-row{display:flex;align-items:center;gap:12px;padding:12px;border-radius:12px;transition:.15s}
+.alert-row:hover{background:var(--slate-50)}
+.alert-row+.alert-row{margin-top:2px}
+.alert-row .amt{margin-left:auto;text-align:right}
+.alert-row .amt b{font-size:14px;font-weight:700}
+.alert-row .amt small{display:block;font-size:11px;color:var(--ink-mute)}
+
+table{width:100%;border-collapse:collapse}
+thead th{text-align:left;font-size:11.5px;font-weight:700;letter-spacing:.04em;text-transform:uppercase;color:var(--ink-mute);padding:11px 14px;border-bottom:1px solid var(--line)}
+tbody td{padding:13px 14px;border-bottom:1px solid var(--line);font-size:14px;vertical-align:middle}
+tbody tr{transition:.13s}
+tbody tr:hover{background:var(--slate-50)}
+tbody tr:last-child td{border-bottom:none}
+.td-user{display:flex;align-items:center;gap:11px}
+.td-user b{font-weight:600;font-size:14px}
+.td-user small{display:block;font-size:12px;color:var(--ink-mute)}
+.bal{font-weight:700;font-variant-numeric:tabular-nums}
+.bal.low{color:var(--rose-600)}
+
+.toolbar{display:flex;align-items:center;gap:12px;margin-bottom:18px;flex-wrap:wrap}
+.chips{display:flex;gap:7px;flex-wrap:wrap}
+.chip{font-size:13px;font-weight:600;color:var(--ink-soft);padding:7px 14px;border-radius:99px;background:var(--surface);border:1px solid var(--line-strong);transition:.15s}
+.chip:hover{border-color:var(--slate-300);background:var(--slate-50)}
+.chip.active{background:var(--slate-900);color:#fff;border-color:var(--slate-900)}
+
+.menu-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:16px}
+.menu-card{background:var(--surface);border:1px solid var(--line);border-radius:var(--radius);overflow:hidden;box-shadow:var(--shadow-sm);transition:.2s var(--ease)}
+.menu-card:hover{box-shadow:var(--shadow-md);transform:translateY(-3px)}
+.menu-card .pic{height:104px;display:grid;place-items:center;font-size:48px;background:linear-gradient(135deg,var(--brand-50),#fff);position:relative}
+.menu-card .pic .cat{position:absolute;top:10px;left:10px}
+.menu-card .pic .stock{position:absolute;top:10px;right:10px}
+.menu-card .mc-body{padding:14px}
+.menu-card .mc-body .name{font-weight:600;font-size:14.5px;display:flex;justify-content:space-between;gap:8px}
+.menu-card .mc-body .price{font-weight:800;color:var(--brand-700);font-family:var(--display)}
+.menu-card .tags{display:flex;gap:5px;flex-wrap:wrap;margin:9px 0 12px}
+.menu-card .mc-foot{display:flex;align-items:center;gap:8px}
+.toggle{display:flex;align-items:center;gap:8px;font-size:12.5px;font-weight:600;color:var(--ink-soft);margin-left:auto}
+.switch{width:38px;height:22px;border-radius:99px;background:var(--slate-300);position:relative;transition:.2s;flex:none}
+.switch::after{content:'';position:absolute;top:2px;left:2px;width:18px;height:18px;border-radius:99px;background:#fff;transition:.2s var(--ease);box-shadow:var(--shadow-xs)}
+.switch.on{background:var(--brand-500)} .switch.on::after{transform:translateX(16px)}
+
+.report-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:18px;margin-bottom:24px}
+.rep-card{padding:20px}
+.rep-card .lbl{font-size:13px;color:var(--ink-soft);font-weight:500}
+.rep-card .val{font-family:var(--display);font-size:26px;font-weight:800;margin-top:6px}
+.rep-card .bar{height:7px;border-radius:99px;background:var(--slate-100);margin-top:12px;overflow:hidden}
+.rep-card .bar i{display:block;height:100%;border-radius:99px;background:linear-gradient(90deg,var(--brand-400),var(--brand-600))}
+
+/* ============================================================
+   CAFETERIA POS
+   ============================================================ */
+.pos-shell{display:grid;grid-template-columns:1fr 408px;min-height:calc(100vh - 60px);background:var(--slate-100)}
+.pos-menu{padding:24px 28px;overflow:auto}
+.pos-head{display:flex;align-items:center;gap:14px;margin-bottom:20px}
+.pos-head h2{font-size:21px}
+.pos-head .sub{font-size:13px;color:var(--ink-soft)}
+.cat-tabs{display:flex;gap:8px;margin-bottom:20px;flex-wrap:wrap}
+.cat-tab{display:flex;align-items:center;gap:8px;padding:10px 16px;border-radius:12px;font-size:13.5px;font-weight:600;color:var(--ink-soft);background:var(--surface);border:1px solid var(--line);transition:.16s;box-shadow:var(--shadow-xs)}
+.cat-tab .em{font-size:15px}
+.cat-tab:hover{border-color:var(--brand-200)}
+.cat-tab.active{background:var(--brand-600);color:#fff;border-color:var(--brand-600);box-shadow:var(--shadow-brand)}
+.pos-items{display:grid;grid-template-columns:repeat(auto-fill,minmax(158px,1fr));gap:14px}
+.pos-item{background:var(--surface);border:1px solid var(--line);border-radius:var(--radius);overflow:hidden;text-align:left;box-shadow:var(--shadow-sm);transition:.16s var(--ease);position:relative}
+.pos-item:hover{transform:translateY(-3px);box-shadow:var(--shadow-md);border-color:var(--brand-300)}
+.pos-item:active{transform:translateY(-1px) scale(.99)}
+.pos-item:disabled{opacity:.5;cursor:not-allowed;transform:none}
+.pos-item .pic{height:86px;font-size:42px;display:grid;place-items:center;background:linear-gradient(135deg,var(--brand-50),#fff)}
+.pos-item .pi-body{padding:11px 12px 13px}
+.pos-item .pi-name{font-weight:600;font-size:13.5px;line-height:1.3}
+.pos-item .pi-row{display:flex;align-items:center;justify-content:space-between;margin-top:7px}
+.pos-item .pi-price{font-family:var(--display);font-weight:800;color:var(--brand-700);font-size:15px}
+.pos-item .add{width:26px;height:26px;border-radius:8px;background:var(--brand-500);color:#fff;display:grid;place-items:center}
+.pos-item .add svg{width:15px;height:15px}
+.pos-item .qbadge{position:absolute;top:8px;right:8px;background:var(--slate-900);color:#fff;font-size:12px;font-weight:700;min-width:22px;height:22px;border-radius:99px;display:grid;place-items:center;padding:0 6px;box-shadow:var(--shadow-md)}
+.pos-item .soldout{position:absolute;inset:0;background:rgba(255,255,255,.6);display:grid;place-items:center;font-weight:700;font-size:12px;color:var(--rose-600);backdrop-filter:blur(1px)}
+
+/* order panel */
+.pos-cart{background:var(--surface);border-left:1px solid var(--line);display:flex;flex-direction:column;position:sticky;top:60px;height:calc(100vh - 60px)}
+.cart-head{padding:20px 22px 16px;border-bottom:1px solid var(--line)}
+.cart-head h3{font-size:17px;display:flex;align-items:center;gap:9px}
+.scan-zone{margin:16px 22px 0}
+.scan-box{border:2px dashed var(--line-strong);border-radius:14px;padding:16px;display:flex;align-items:center;gap:13px;transition:.18s;background:var(--slate-50)}
+.scan-box .qic{width:46px;height:46px;border-radius:12px;background:var(--slate-900);display:grid;place-items:center;flex:none}
+.scan-box .qic svg{width:24px;height:24px;color:#fff}
+.scan-box .scan-txt b{font-size:14px;display:block}
+.scan-box .scan-txt small{font-size:12px;color:var(--ink-mute)}
+.scan-pick{display:flex;flex-direction:column;gap:8px;margin-top:11px}
+.scan-input{display:flex;gap:8px}
+.scan-input input{flex:1;border:1px solid var(--line-strong);border-radius:10px;padding:10px 12px;font-size:13.5px;outline:none;transition:.15s}
+.scan-input input:focus{border-color:var(--brand-300);box-shadow:var(--ring)}
+.quick-students{display:flex;gap:6px;flex-wrap:wrap;margin-top:9px}
+.qs{font-size:11.5px;font-weight:600;color:var(--ink-soft);padding:5px 10px;border-radius:99px;background:var(--slate-100);transition:.14s}
+.qs:hover{background:var(--brand-50);color:var(--brand-700)}
+
+.student-card{margin:14px 22px 0;padding:14px;border-radius:14px;background:linear-gradient(135deg,var(--brand-600),var(--brand-700));color:#fff;box-shadow:var(--shadow-brand);position:relative;overflow:hidden}
+.student-card::before{content:'';position:absolute;right:-30px;top:-30px;width:120px;height:120px;border-radius:99px;background:rgba(255,255,255,.08)}
+.student-card .sc-top{display:flex;align-items:center;gap:12px}
+.student-card .sc-av{width:44px;height:44px;border-radius:12px;background:rgba(255,255,255,.2);display:grid;place-items:center;font-weight:800;font-size:16px;backdrop-filter:blur(4px)}
+.student-card .sc-name b{font-size:15px;font-weight:700;display:block}
+.student-card .sc-name small{font-size:12px;opacity:.85}
+.student-card .sc-bal{margin-top:13px;display:flex;align-items:flex-end;justify-content:space-between}
+.student-card .sc-bal .lbl{font-size:11.5px;opacity:.8;font-weight:600;letter-spacing:.02em}
+.student-card .sc-bal .num{font-family:var(--display);font-size:26px;font-weight:800}
+.student-card .sc-allergy{margin-top:11px;font-size:11.5px;background:rgba(255,255,255,.16);padding:5px 10px;border-radius:8px;display:inline-flex;align-items:center;gap:6px;font-weight:600}
+.student-card .sc-allergy svg{width:13px;height:13px}
+
+.cart-items{flex:1;overflow:auto;padding:14px 22px}
+.cart-empty{height:100%;display:flex;flex-direction:column;align-items:center;justify-content:center;color:var(--ink-mute);text-align:center;gap:12px;padding:30px}
+.cart-empty .ce-ic{width:64px;height:64px;border-radius:18px;background:var(--slate-100);display:grid;place-items:center}
+.cart-empty .ce-ic svg{width:30px;height:30px;color:var(--slate-400)}
+.cart-line{display:flex;align-items:center;gap:11px;padding:11px 0;border-bottom:1px solid var(--line)}
+.cart-line .cl-em{width:40px;height:40px;border-radius:11px;background:var(--brand-50);display:grid;place-items:center;font-size:21px;flex:none}
+.cart-line .cl-info{flex:1;min-width:0}
+.cart-line .cl-info b{font-size:13.5px;font-weight:600;display:block}
+.cart-line .cl-info small{font-size:12px;color:var(--ink-mute)}
+.qty-step{display:flex;align-items:center;gap:9px}
+.qty-step button{width:26px;height:26px;border-radius:8px;background:var(--slate-100);color:var(--ink);display:grid;place-items:center;transition:.13s;font-weight:700}
+.qty-step button:hover{background:var(--slate-200)}
+.qty-step button svg{width:14px;height:14px}
+.qty-step .q{font-weight:700;min-width:18px;text-align:center;font-size:14px}
+.cart-line .cl-amt{font-weight:700;min-width:54px;text-align:right;font-variant-numeric:tabular-nums}
+
+.cart-foot{border-top:1px solid var(--line);padding:18px 22px;background:var(--slate-50)}
+.cart-foot .row{display:flex;justify-content:space-between;font-size:13.5px;color:var(--ink-soft);margin-bottom:8px}
+.cart-foot .row.total{font-size:18px;font-weight:800;color:var(--ink);font-family:var(--display);margin:12px 0 4px;padding-top:12px;border-top:1px dashed var(--line-strong)}
+.cart-foot .row.total .mono{color:var(--brand-700)}
+.bal-after{font-size:12px;text-align:right;color:var(--ink-mute);margin-bottom:14px}
+.bal-after.short{color:var(--rose-600);font-weight:600}
+
+/* ============================================================
+   PARENT MOBILE APP
+   ============================================================ */
+.parent-stage{min-height:calc(100vh - 60px);display:grid;grid-template-columns:1.05fr .95fr;align-items:center;gap:20px;
+  background:radial-gradient(900px 500px at 85% 0,#dcebe0 0,transparent 55%),
+             radial-gradient(700px 500px at 0 100%,#f2ecd6 0,transparent 50%),var(--bg);padding:40px 60px}
+.parent-pitch{max-width:440px;justify-self:end;padding-right:30px}
+.parent-pitch .eyebrow{display:inline-flex;align-items:center;gap:7px;font-size:12px;font-weight:700;color:var(--brand-600);background:var(--brand-50);padding:6px 12px;border-radius:99px;letter-spacing:.02em}
+.parent-pitch h2{font-family:var(--serif);font-weight:400;font-size:34px;letter-spacing:.005em;color:var(--brand-800);margin:18px 0 14px;line-height:1.22}
+.parent-pitch p{color:var(--ink-soft);font-size:15.5px;line-height:1.65;margin-bottom:24px}
+.feat-list{display:flex;flex-direction:column;gap:14px}
+.feat{display:flex;gap:13px;align-items:flex-start}
+.feat .fic{width:38px;height:38px;border-radius:11px;display:grid;place-items:center;flex:none;background:var(--surface);box-shadow:var(--shadow-sm);border:1px solid var(--line)}
+.feat .fic svg{width:18px;height:18px;color:var(--brand-600)}
+.feat b{font-size:14.5px;font-weight:600}
+.feat p{font-size:13px;color:var(--ink-soft);margin:2px 0 0;line-height:1.5}
+
+/* phone */
+.phone-wrap{justify-self:start;display:flex;flex-direction:column;align-items:center;gap:14px}
+.phone{width:344px;height:716px;background:#101b16;border-radius:48px;padding:11px;box-shadow:0 40px 80px -24px rgba(15,23,42,.45),0 0 0 1.5px rgba(255,255,255,.06) inset;position:relative}
+.phone .screen{width:100%;height:100%;border-radius:38px;overflow:hidden;background:#f1f2ec;position:relative;display:flex;flex-direction:column}
+.phone .notch{position:absolute;top:11px;left:50%;transform:translateX(-50%);width:120px;height:26px;background:#101b16;border-radius:0 0 16px 16px;z-index:30}
+.statusbar{display:flex;justify-content:space-between;align-items:center;padding:15px 26px 6px;font-size:12.5px;font-weight:700;color:var(--ink);background:transparent}
+.statusbar .sb-r{display:flex;gap:6px;align-items:center}
+.statusbar svg{width:15px;height:15px}
+.p-screen{flex:1;overflow:auto;-webkit-overflow-scrolling:touch;background:#f1f2ec}
+.p-screen::-webkit-scrollbar{width:0}
+.p-view{display:none;animation:fade .25s var(--ease)}
+.p-view.active{display:block}
+
+/* ---- Parent HOME (clean, light, professional) ---- */
+.ph{padding:6px 20px 22px}
+.ph-head{display:flex;align-items:center;justify-content:space-between;margin:8px 0 18px}
+.ph-hi small{font-size:13.5px;color:var(--ink-soft);display:block;font-weight:500}
+.ph-hi b{font-size:22px;font-family:var(--display);font-weight:800;letter-spacing:-.02em}
+.ph-bell{width:46px;height:46px;border-radius:15px;background:var(--surface);box-shadow:var(--shadow-sm);display:grid;place-items:center;position:relative;transition:.15s}
+.ph-bell:hover{box-shadow:var(--shadow-md)}
+.ph-bell svg{width:20px;height:20px;color:var(--ink)}
+.ph-bell .ping{position:absolute;top:11px;right:13px;width:8px;height:8px;background:var(--amber-500);border-radius:99px;border:2px solid var(--surface)}
+.ph-kids{display:flex;gap:11px;margin-bottom:18px}
+.kid{flex:1;display:flex;align-items:center;gap:10px;background:#fff;border:1px solid var(--line);border-radius:16px;padding:11px 12px;transition:.16s var(--ease);box-shadow:var(--shadow-xs)}
+.kid:hover{border-color:var(--brand-200)}
+.kid.active{box-shadow:0 0 0 2px var(--brand-500),var(--shadow-sm);border-color:transparent}
+.kid:not(.active){opacity:.72}
+.kid .kav{width:40px;height:40px;border-radius:12px;display:grid;place-items:center;font-size:14px;font-weight:800;color:#fff;flex:none;font-family:var(--display)}
+.kid-info{text-align:left;min-width:0}
+.kid-info b{font-size:15px;font-weight:700;display:block;line-height:1.2}
+.kid-info small{font-size:12px;color:var(--ink-mute)}
+
+.walletcard{position:relative;overflow:hidden;border-radius:24px;padding:22px;color:#fff;margin-bottom:18px;
+  background:
+    radial-gradient(150% 120% at 100% 0%,rgba(201,162,39,.22) 0,transparent 42%),
+    repeating-linear-gradient(115deg,rgba(255,255,255,.028) 0 2px,transparent 2px 9px),
+    linear-gradient(135deg,#1d4b39 0%,#143a2b 55%,#0f2b21 100%);
+  box-shadow:0 22px 44px -18px rgba(15,43,33,.65),inset 0 0 0 1px rgba(201,162,39,.35)}
+.walletcard::after{content:'';position:absolute;left:22px;right:22px;bottom:64px;height:1px;background:linear-gradient(90deg,rgba(217,180,74,.55),rgba(217,180,74,0));pointer-events:none}
+.walletcard .wc-watermark{position:absolute;right:-22px;top:6px;opacity:.14;pointer-events:none;color:var(--gold-400)}
+.walletcard .wc-watermark svg{width:172px;height:172px;stroke-width:1.4}
+.walletcard .wc-id{position:absolute;top:20px;right:20px;font-size:11px;font-weight:700;letter-spacing:.1em;color:#0f2b21;background:linear-gradient(120deg,#e8ce7c,#c9a227);padding:5px 12px;border-radius:99px;box-shadow:0 3px 8px -2px rgba(0,0,0,.4)}
+.walletcard .wc-eyebrow{font-size:11px;font-weight:700;letter-spacing:.2em;text-transform:uppercase;color:var(--gold-400)}
+.walletcard .wc-name{font-family:var(--serif);font-size:16px;font-weight:400;letter-spacing:.03em;margin-top:14px;color:#f2efe1}
+.walletcard .wc-bal{font-family:var(--display);font-size:46px;font-weight:800;letter-spacing:-.03em;line-height:1.05;margin:2px 0 16px}
+.walletcard .wc-auto{display:inline-flex;align-items:center;gap:8px;font-size:13px;font-weight:600;color:#f2efe1;background:rgba(255,255,255,.10);border:1px solid rgba(217,180,74,.35);padding:8px 14px;border-radius:99px;backdrop-filter:blur(4px);transition:.15s}
+.walletcard .wc-auto:hover{background:rgba(255,255,255,.18)}
+.walletcard .wc-auto .dot{width:7px;height:7px;border-radius:99px;background:var(--gold-400)}
+
+.ph-actions{display:grid;grid-template-columns:repeat(3,1fr);gap:11px;margin-bottom:24px}
+.act{background:#fff;border:1px solid var(--line);border-radius:18px;padding:16px 14px;display:flex;flex-direction:column;align-items:flex-start;gap:14px;min-height:96px;box-shadow:var(--shadow-xs);transition:.16s var(--ease)}
+.act:hover{transform:translateY(-2px);box-shadow:var(--shadow-md)}
+.act b{font-size:14px;font-weight:700}
+.act .act-ic{width:40px;height:40px;border-radius:12px;display:grid;place-items:center}
+.act .act-ic svg{width:19px;height:19px}
+.act.primary{background:var(--slate-900);border-color:var(--slate-900);color:#fff}
+.act.primary .act-ic{background:rgba(255,255,255,.14);color:#fff}
+.act .act-ic.ic-indigo{background:var(--brand-50);color:var(--brand-600)}
+.act .act-ic.ic-amber{background:var(--amber-50);color:var(--amber-600)}
+.act .act-ic.ic-mint{background:var(--mint-50);color:var(--mint-600)}
+
+.ph-sec{margin-bottom:20px}
+.ph-sechead{display:flex;align-items:center;justify-content:space-between;margin-bottom:12px}
+.ph-sechead h4{font-size:17px;font-weight:800}
+.ph-sechead a{font-size:13px;font-weight:700;color:var(--brand-600);cursor:pointer}
+.ph-stats{display:grid;grid-template-columns:1fr 1fr;gap:11px}
+.pstat{background:#fff;border:1px solid var(--line);border-radius:18px;padding:16px;box-shadow:var(--shadow-xs)}
+.pstat-head{display:flex;align-items:center;gap:9px;font-size:13.5px;font-weight:600;color:var(--ink-soft)}
+.pstat-ic{width:34px;height:34px;border-radius:10px;display:grid;place-items:center}
+.pstat-ic svg{width:17px;height:17px}
+.pstat-ic.ic-mint{background:var(--mint-50);color:var(--mint-600)}
+.pstat-ic.ic-indigo{background:var(--brand-50);color:var(--brand-600)}
+.pstat-val{font-family:var(--display);font-weight:800;font-size:26px;letter-spacing:-.02em;margin:12px 0 3px}
+.pstat-sub{font-size:12px;color:var(--ink-mute);line-height:1.4}
+.ph-card{background:#fff;border:1px solid var(--line);border-radius:18px;padding:6px 16px;box-shadow:var(--shadow-xs)}
+
+/* ---- secondary parent screens ---- */
+.p-section{padding:18px 20px 0}
+.p-sec-head{display:flex;align-items:center;justify-content:space-between;margin-bottom:12px}
+.p-sec-head h4{font-size:15px}
+.p-sec-head a{font-size:12.5px;font-weight:600;color:var(--brand-600);cursor:pointer}
+
+.txn{display:flex;align-items:center;gap:12px;padding:12px 0;border-bottom:1px solid var(--line)}
+.txn:last-child{border-bottom:none}
+.txn .tx-ic{width:40px;height:40px;border-radius:12px;display:grid;place-items:center;font-size:19px;flex:none}
+.txn .tx-ic.buy{background:var(--brand-50)} .txn .tx-ic.add{background:var(--mint-50)} .txn .tx-ic.dec{background:var(--rose-50)}
+.txn .tx-info{flex:1;min-width:0}
+.txn .tx-info b{font-size:13.5px;font-weight:600;display:block}
+.txn .tx-info small{font-size:11.5px;color:var(--ink-mute)}
+.txn .tx-amt{font-weight:700;font-size:14px;text-align:right;font-variant-numeric:tabular-nums}
+.txn .tx-amt.minus{color:var(--ink)} .txn .tx-amt.plus{color:var(--mint-600)} .txn .tx-amt.dec{color:var(--rose-500)}
+.txn .tx-amt small{display:block;font-weight:500;font-size:11px;color:var(--ink-mute)}
+.day-label{font-size:11.5px;font-weight:700;color:var(--ink-mute);text-transform:uppercase;letter-spacing:.04em;padding:14px 0 2px}
+
+.notif{display:flex;gap:12px;padding:14px;border-radius:14px;background:var(--surface);border:1px solid var(--line);margin-bottom:10px;box-shadow:var(--shadow-xs)}
+.notif .nt-ic{width:38px;height:38px;border-radius:11px;display:grid;place-items:center;flex:none}
+.notif .nt-ic svg{width:18px;height:18px;color:#fff}
+.notif .nt-body b{font-size:13.5px;font-weight:600;display:block}
+.notif .nt-body p{font-size:12.5px;color:var(--ink-soft);margin-top:2px;line-height:1.45}
+.notif .nt-body small{font-size:11px;color:var(--ink-mute);display:block;margin-top:5px}
+.notif.unread{background:var(--brand-50);border-color:var(--brand-200)}
+
+.recharge-amts{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin:8px 0 16px}
+.ramt{padding:16px 10px;border-radius:14px;border:1.5px solid var(--line-strong);background:var(--surface);text-align:center;font-family:var(--display);font-weight:800;font-size:17px;transition:.15s}
+.ramt:hover{border-color:var(--brand-300)}
+.ramt.active{border-color:var(--brand-500);background:var(--brand-50);color:var(--brand-600)}
+.pay-methods{display:flex;flex-direction:column;gap:9px;margin-bottom:18px}
+.pay-m{display:flex;align-items:center;gap:12px;padding:13px 14px;border-radius:13px;border:1.5px solid var(--line-strong);background:var(--surface);transition:.15s}
+.pay-m.active{border-color:var(--brand-500);background:var(--brand-50)}
+.pay-m .pm-ic{width:36px;height:36px;border-radius:10px;display:grid;place-items:center;font-size:18px;background:var(--slate-100)}
+.pay-m b{font-size:13.5px;font-weight:600}
+.pay-m small{font-size:11.5px;color:var(--ink-mute);display:block}
+.pay-m .pm-check{margin-left:auto;width:20px;height:20px;border-radius:99px;border:2px solid var(--line-strong);display:grid;place-items:center}
+.pay-m.active .pm-check{border-color:var(--brand-500);background:var(--brand-500)}
+.pay-m.active .pm-check svg{width:12px;height:12px;color:#fff}
+.pay-m:not(.active) .pm-check svg{display:none}
+
+.note-compose{background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:14px;box-shadow:var(--shadow-xs)}
+.note-compose textarea{width:100%;border:none;outline:none;resize:none;font-size:13.5px;font-family:inherit;min-height:70px;color:var(--ink)}
+.note-compose .nc-foot{display:flex;justify-content:space-between;align-items:center;border-top:1px solid var(--line);padding-top:11px;margin-top:8px}
+.msg-bubble{max-width:80%;padding:11px 14px;border-radius:16px;font-size:13px;line-height:1.45;margin-bottom:10px}
+.msg-bubble.out{background:var(--brand-600);color:#fff;border-bottom-right-radius:5px;margin-left:auto}
+.msg-bubble.in{background:var(--surface);border:1px solid var(--line);border-bottom-left-radius:5px}
+.msg-bubble small{display:block;font-size:10.5px;opacity:.7;margin-top:4px}
+
+.p-tabbar{display:flex;background:var(--surface);border-top:1px solid var(--line);padding:9px 12px calc(9px + env(safe-area-inset-bottom));box-shadow:0 -2px 14px rgba(15,23,42,.05)}
+.p-tab{flex:1;display:flex;flex-direction:column;align-items:center;gap:3px;padding:6px;color:var(--ink-mute);font-size:10.5px;font-weight:600;transition:.15s;border-radius:10px}
+.p-tab svg{width:21px;height:21px}
+.p-tab.active{color:var(--brand-600)}
+.p-tab .pt-badge{position:absolute;transform:translate(13px,-4px);background:var(--rose-500);color:#fff;font-size:9px;font-weight:800;min-width:15px;height:15px;border-radius:99px;display:grid;place-items:center;padding:0 4px}
+.p-tab-wrap{position:relative;flex:1;display:flex}
+
+/* ============================================================
+   MODAL
+   ============================================================ */
+.modal-overlay{position:fixed;inset:0;background:rgba(15,23,42,.55);backdrop-filter:blur(4px);z-index:100;display:none;align-items:center;justify-content:center;padding:24px;animation:fade .2s}
+.modal-overlay.show{display:flex}
+.modal{background:var(--surface);border-radius:var(--radius-lg);width:100%;max-width:460px;box-shadow:var(--shadow-lg);animation:pop .28s var(--ease);overflow:hidden}
+@keyframes pop{from{opacity:0;transform:scale(.94) translateY(10px)}to{opacity:1;transform:none}}
+.modal-head{padding:22px 24px 0;display:flex;justify-content:space-between;align-items:flex-start}
+.modal-head h3{font-size:19px}
+.modal-head p{font-size:13px;color:var(--ink-soft);margin-top:4px}
+.modal-head .x{width:34px;height:34px;border-radius:10px;display:grid;place-items:center;color:var(--ink-mute);transition:.15s}
+.modal-head .x:hover{background:var(--slate-100);color:var(--ink)}
+.modal-head .x svg{width:18px;height:18px}
+.modal-body{padding:20px 24px}
+.modal-foot{padding:0 24px 22px;display:flex;gap:10px}
+.field{margin-bottom:16px}
+.field label{display:block;font-size:12.5px;font-weight:600;color:var(--ink-soft);margin-bottom:7px}
+.field .control{display:flex;align-items:center;gap:9px;border:1.5px solid var(--line-strong);border-radius:12px;padding:11px 14px;transition:.15s;background:var(--surface)}
+.field .control:focus-within{border-color:var(--brand-400);box-shadow:var(--ring)}
+.field .control .pfx{color:var(--ink-mute);font-weight:700}
+.field .control input,.field .control select{border:none;outline:none;width:100%;font-size:15px;background:none}
+.amt-quick{display:flex;gap:8px;margin-top:10px}
+.amt-quick button{flex:1;padding:9px;border-radius:10px;background:var(--slate-50);border:1px solid var(--line-strong);font-weight:700;font-size:13px;color:var(--ink-soft);transition:.14s}
+.amt-quick button:hover{background:var(--brand-50);color:var(--brand-700);border-color:var(--brand-200)}
+.found-student{display:flex;align-items:center;gap:12px;padding:13px;border-radius:13px;background:var(--brand-50);border:1px solid var(--brand-100);margin-bottom:4px}
+.found-student .fs-bal{margin-left:auto;text-align:right}
+.found-student .fs-bal small{font-size:11px;color:var(--ink-soft);display:block}
+.found-student .fs-bal b{font-weight:800;color:var(--brand-700);font-family:var(--display)}
+
+/* result modal */
+.result-modal{text-align:center;padding:36px 30px 30px}
+.result-ic{width:84px;height:84px;border-radius:50%;display:grid;place-items:center;margin:0 auto 20px;animation:popIc .45s var(--ease)}
+@keyframes popIc{0%{transform:scale(0)}60%{transform:scale(1.12)}100%{transform:scale(1)}}
+.result-ic svg{width:42px;height:42px;color:#fff;stroke-width:2.5}
+.result-ic.ok{background:linear-gradient(135deg,var(--mint-500),var(--mint-600));box-shadow:0 12px 30px -8px rgba(5,150,105,.45)}
+.result-ic.fail{background:linear-gradient(135deg,var(--rose-500),var(--rose-600));box-shadow:0 12px 30px -8px rgba(244,63,94,.5)}
+.result-modal h3{font-size:22px;margin-bottom:8px}
+.result-modal p{color:var(--ink-soft);font-size:14px;line-height:1.55;margin-bottom:20px}
+.receipt{background:var(--slate-50);border:1px dashed var(--line-strong);border-radius:14px;padding:16px;text-align:left;margin-bottom:22px}
+.receipt .rc-row{display:flex;justify-content:space-between;font-size:13px;padding:5px 0;color:var(--ink-soft)}
+.receipt .rc-row b{color:var(--ink)}
+.receipt .rc-row.tot{border-top:1px dashed var(--line-strong);margin-top:6px;padding-top:10px;font-weight:800;font-size:15px;color:var(--ink)}
+
+/* ============================================================
+   TOASTS
+   ============================================================ */
+.toast-wrap{position:fixed;top:70px;right:22px;z-index:200;display:flex;flex-direction:column;gap:11px;width:340px;max-width:calc(100vw - 44px)}
+.toast{background:var(--surface);border:1px solid var(--line);border-radius:15px;box-shadow:var(--shadow-lg);padding:14px;display:flex;gap:12px;animation:toastIn .4s var(--ease);overflow:hidden;position:relative}
+@keyframes toastIn{from{opacity:0;transform:translateX(40px) scale(.96)}to{opacity:1;transform:none}}
+.toast.out{animation:toastOut .3s var(--ease) forwards}
+@keyframes toastOut{to{opacity:0;transform:translateX(40px);margin-top:-60px}}
+.toast .t-ic{width:42px;height:42px;border-radius:12px;display:grid;place-items:center;flex:none}
+.toast .t-ic svg{width:20px;height:20px;color:#fff}
+.toast.green .t-ic{background:linear-gradient(135deg,var(--mint-500),var(--mint-600))}
+.toast.sky .t-ic{background:linear-gradient(135deg,var(--sky-500),var(--sky-600))}
+.toast.amber .t-ic{background:linear-gradient(135deg,var(--amber-500),var(--amber-600))}
+.toast.rose .t-ic{background:linear-gradient(135deg,var(--rose-500),var(--rose-600))}
+.toast .t-body{flex:1;min-width:0}
+.toast .t-body b{font-size:13.5px;font-weight:700;display:flex;align-items:center;gap:6px}
+.toast .t-body .src{font-size:10px;font-weight:700;color:var(--ink-mute);text-transform:uppercase;letter-spacing:.05em}
+.toast .t-body p{font-size:12.5px;color:var(--ink-soft);margin-top:3px;line-height:1.4}
+.toast .t-prog{position:absolute;bottom:0;left:0;height:3px;background:var(--brand-400);animation:prog 4.2s linear forwards}
+.toast.sky .t-prog{background:var(--sky-400,#38bdf8)} .toast.rose .t-prog{background:var(--rose-400,#fb7185)} .toast.amber .t-prog{background:var(--amber-400,#fbbf24)}
+@keyframes prog{from{width:100%}to{width:0}}
+
+/* utility */
+.muted{color:var(--ink-mute)}
+.flex{display:flex}.items-center{align-items:center}.gap{gap:10px}
+.mt{margin-top:14px}.mb{margin-bottom:14px}
+.empty-mini{text-align:center;color:var(--ink-mute);font-size:13px;padding:30px 10px}
+
+@media(max-width:1180px){
+  .parent-stage{grid-template-columns:1fr;justify-items:center;padding:30px 20px}
+  .parent-pitch{justify-self:center;text-align:center;padding:0;max-width:520px}
+  .parent-pitch .feat{text-align:left}
+  .grid-2{grid-template-columns:1fr}
+  .kpi-grid{grid-template-columns:repeat(2,1fr)}
+}
+@media(max-width:980px){
+  .admin-shell{grid-template-columns:1fr}.sidebar{display:none}
+  .pos-shell{grid-template-columns:1fr}.pos-cart{position:relative;height:auto;top:0}
+  .role-cards{grid-template-columns:1fr}
+  .role-switch button span{display:none}
+  .searchbox{display:none}
+}
+
+/* ============================================================
+   REVIEW FIXES — a11y · overflow · responsive · states
+   ============================================================ */
+.switch:focus-visible{box-shadow:var(--ring)}
+.kpi .delta.flat{color:var(--ink-mute)}
+.sr-only{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0}
+.tx-info b,.cl-info b{white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:100%}
+.td-user b{white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:180px;display:block}
+.pos-item .pi-name{display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;min-height:2.5em}
+.cart-line .cl-info{overflow:hidden}
+/* warning confirm variant (order will be declined) */
+.btn-warn{background:linear-gradient(135deg,var(--amber-500),var(--amber-600))!important;color:#fff!important;animation:none!important;box-shadow:0 12px 26px -10px rgba(217,119,6,.55)!important}
+/* parent tab badge — anchored to icon, no float-off */
+.p-tab-wrap .pt-badge{position:absolute;top:2px;left:50%;transform:translateX(3px)}
+/* modal background inert */
+.stage[aria-hidden="true"]{filter:none}
+/* phone responsive */
+@media(max-width:430px){
+  .phone{width:100%;max-width:340px;height:auto;aspect-ratio:340/712}
+  .parent-stage{padding:18px 10px}
+  .toast-wrap{right:12px;left:12px;width:auto}
+}
+/* POS responsive: keep scan→cart flow on top, menu below */
+@media(max-width:980px){
+  .pos-cart{order:-1;border-left:none;border-bottom:1px solid var(--line)}
+  .pos-menu{order:1}
+}
+
+/* ============================================================
+   ST. LAWRENCE THEME LAYER — Laurel & Brass refinements
+   ============================================================ */
+/* receipt: school-stationery slip */
+.receipt{background:#fdfcf7;border:1px solid var(--line-strong);border-top:3px solid var(--gold-500);border-radius:12px 12px 14px 14px;box-shadow:var(--shadow-xs)}
+.receipt .rc-head{display:flex;align-items:center;gap:10px;color:var(--brand-700);padding-bottom:11px;margin-bottom:9px;border-bottom:1px dashed var(--line-strong)}
+.receipt .rc-head b{font-family:var(--serif);font-weight:400;font-size:13.5px;display:block;letter-spacing:.02em;color:var(--brand-800)}
+.receipt .rc-head small{font-size:10.5px;color:var(--ink-mute);letter-spacing:.04em}
+.receipt .rc-row.tot{color:var(--brand-800)}
+
+/* POS student card: brass hairline + crest tone */
+.student-card{box-shadow:var(--shadow-brand),inset 0 0 0 1px rgba(201,162,39,.35)}
+.student-card::before{background:rgba(201,162,39,.12)}
+.student-card .sc-bal .num{color:#f2ecd2}
+
+/* headline discipline: dashboard headings stay Sora; panel titles calm */
+.panel-head h3,.pos-head h2,.topbar h2{letter-spacing:-.015em}
+.role-card h3{font-family:var(--display)}
+
+/* login pills sit on paper */
+.login-head p{color:var(--ink-soft)}
+.login-foot b{color:var(--brand-700)}
+
+/* chips: laurel active with brass tick of contrast */
+.chip.active{background:var(--brand-700);border-color:var(--brand-700)}
+
+/* KPI hover lifts with a whisper of brass */
+.kpi:hover{border-color:var(--brand-200)}
+.kpi.c2 .delta.up{color:var(--gold-700)}
+
+/* parent app: section headings slightly serif-flavoured via spacing only */
+.ph-hi b{letter-spacing:-.015em}
+
+/* toasts: brass progress on green toasts */
+.toast.green .t-prog{background:var(--gold-500)}
+
+/* smooth theme-wide micro-interactions */
+.badge,.avatar,.kid,.pay-m,.ramt{transition:.16s var(--ease)}
+
+/* respect reduced motion everywhere */
+@media (prefers-reduced-motion: reduce){
+  *,*::before,*::after{animation-duration:.01ms!important;animation-iteration-count:1!important;transition-duration:.01ms!important}
+}
+
+/* view routing must win over per-view display rules (e.g. #login grid) */
+.stage > .view:not(.active){display:none!important}
+
+/* modal field icons: contained, muted */
+.field .control > svg{width:16px;height:16px;flex:none;color:var(--ink-mute)}
+
+/* masthead on smaller screens */
+@media(max-width:1120px){.demobar .tag{display:none}}
+@media(max-width:900px){
+  .demobar .brand .word small{display:none}
+  .demobar .brand .word b{font-size:14.5px;white-space:normal;line-height:1.15}
+}
+@media(max-width:560px){.demobar{gap:10px;padding:0 12px}.demobar .brand .word b{font-size:13px}.demobar .reset{font-size:0;gap:0;padding:7px}.demobar .reset svg{width:16px;height:16px}}
+</style>
+</head>
+<body>
+
+<!-- ============ TOP DEMO BAR ============ -->
+<div class="demobar">
+  <div class="brand">
+    <span class="logo">
+      <svg viewBox="0 0 24 24" fill="none" width="21" height="21"><path d="M12 2.7 18.6 5.3v6c0 4.9-2.9 8.2-6.6 10-3.7-1.8-6.6-5.1-6.6-10v-6L12 2.7Z" stroke="#d9b44a" stroke-width="1.5" stroke-linejoin="round"/><path d="M8.5 11c1.15-.8 2.35-.8 3.5 0m0 0c1.15-.8 2.35-.8 3.5 0M12 11v4.4m-3.5-.6c1.15-.8 2.35-.8 3.5 0 1.15-.8 2.35-.8 3.5 0" stroke="#d9b44a" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"/><path d="m12 5.6.95 1.6L12 8.8l-.95-1.6L12 5.6Z" fill="#d9b44a"/></svg>
+    </span>
+    <span class="word"><b>St. Lawrence International School</b><small>Campus Café · Mysuru</small></span>
+    <span class="tag">Client Preview</span>
+  </div>
+  <div class="role-switch" id="roleSwitch" role="tablist" aria-label="Switch demo role">
+    <button data-role="login" aria-label="Home"><svg viewBox="0 0 24 24" fill="none"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg><span>Home</span></button>
+    <button data-role="admin" aria-label="Admin dashboard"><svg viewBox="0 0 24 24" fill="none"><rect x="3" y="3" width="7" height="9" rx="1.5" stroke="currentColor" stroke-width="1.8"/><rect x="14" y="3" width="7" height="5" rx="1.5" stroke="currentColor" stroke-width="1.8"/><rect x="14" y="12" width="7" height="9" rx="1.5" stroke="currentColor" stroke-width="1.8"/><rect x="3" y="16" width="7" height="5" rx="1.5" stroke="currentColor" stroke-width="1.8"/></svg><span>Admin</span></button>
+    <button data-role="pos" aria-label="Cafeteria POS"><svg viewBox="0 0 24 24" fill="none"><rect x="4" y="2" width="16" height="20" rx="2" stroke="currentColor" stroke-width="1.8"/><path d="M8 6h8M8 10h8M9 18h6" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg><span>Cafeteria POS</span></button>
+    <button data-role="parent" aria-label="Parent app"><svg viewBox="0 0 24 24" fill="none"><rect x="6" y="2" width="12" height="20" rx="3" stroke="currentColor" stroke-width="1.8"/><path d="M11 18h2" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg><span>Parent App</span></button>
+  </div>
+  <button class="reset" id="resetBtn" title="Reset demo data">
+    <svg viewBox="0 0 24 24" fill="none"><path d="M3 12a9 9 0 1 0 3-6.7L3 8m0-5v5h5" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
+    Reset data
+  </button>
+</div>
+
+<div class="stage">
+  <!-- ============ LOGIN ============ -->
+  <section id="login" class="view active">
+    <div class="login-wrap">
+      <div class="login-head">
+        <div class="mark"><svg viewBox="0 0 24 24" fill="none" width="34" height="34"><path d="M12 2.7 18.6 5.3v6c0 4.9-2.9 8.2-6.6 10-3.7-1.8-6.6-5.1-6.6-10v-6L12 2.7Z" stroke="#d9b44a" stroke-width="1.5" stroke-linejoin="round"/><path d="M8.5 11c1.15-.8 2.35-.8 3.5 0m0 0c1.15-.8 2.35-.8 3.5 0M12 11v4.4m-3.5-.6c1.15-.8 2.35-.8 3.5 0 1.15-.8 2.35-.8 3.5 0" stroke="#d9b44a" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"/><path d="m12 5.6.95 1.6L12 8.8l-.95-1.6L12 5.6Z" fill="#d9b44a"/></svg></div>
+        <div class="school-eyebrow">St. Lawrence International School · Yadavagiri, Mysuru</div>
+        <h1>The Campus Café, Cashless.</h1>
+        <div class="gold-rule" aria-hidden="true"></div>
+        <p>One integrated platform for the school's cafeteria — real-time student wallets, QR billing at the counter, and instant parent notifications. Pick a role to explore the live prototype.</p>
+        <div class="pills">
+          <span class="badge badge-green"><span class="dot"></span> Real-time wallet</span>
+          <span class="badge badge-indigo"><span class="dot"></span> QR / ID billing</span>
+          <span class="badge badge-sky"><span class="dot"></span> Instant alerts</span>
+          <span class="badge badge-amber"><span class="dot"></span> Zero cash</span>
+        </div>
+      </div>
+      <div class="role-cards">
+        <button class="role-card admin" data-goto="admin">
+          <div class="ic"><svg viewBox="0 0 24 24" fill="none"><rect x="3" y="3" width="7" height="9" rx="1.5" stroke="#fff" stroke-width="1.8"/><rect x="14" y="3" width="7" height="5" rx="1.5" stroke="#fff" stroke-width="1.8"/><rect x="14" y="12" width="7" height="9" rx="1.5" stroke="#fff" stroke-width="1.8"/><rect x="3" y="16" width="7" height="5" rx="1.5" stroke="#fff" stroke-width="1.8"/></svg></div>
+          <h3>Admin Dashboard</h3>
+          <p>Manage students grade-wise, top-up wallets, run the menu, and track sales &amp; low-balance alerts.</p>
+          <span class="enter">Open dashboard <svg viewBox="0 0 24 24" fill="none"><path d="M5 12h14m-6-7 7 7-7 7" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+        </button>
+        <button class="role-card pos" data-goto="pos">
+          <div class="ic"><svg viewBox="0 0 24 24" fill="none"><rect x="4" y="2" width="16" height="20" rx="2" stroke="#fff" stroke-width="1.8"/><path d="M8 6h8M8 10h8M9 18h6" stroke="#fff" stroke-width="1.8" stroke-linecap="round"/></svg></div>
+          <h3>Cafeteria POS</h3>
+          <p>Staff scan a student ID, build the order, and the balance is checked &amp; deducted in real time.</p>
+          <span class="enter">Open POS <svg viewBox="0 0 24 24" fill="none"><path d="M5 12h14m-6-7 7 7-7 7" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+        </button>
+        <button class="role-card parent" data-goto="parent">
+          <div class="ic"><svg viewBox="0 0 24 24" fill="none"><rect x="6" y="2" width="12" height="20" rx="3" stroke="#fff" stroke-width="1.8"/><path d="M11 18h2" stroke="#fff" stroke-width="1.8" stroke-linecap="round"/></svg></div>
+          <h3>Parent Mobile App</h3>
+          <p>Recharge the wallet, see every purchase the moment it happens, and message the cafeteria.</p>
+          <span class="enter">Open app <svg viewBox="0 0 24 24" fill="none"><path d="M5 12h14m-6-7 7 7-7 7" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+        </button>
+      </div>
+      <p class="login-foot">💡 Tip: Place an order in <b>Cafeteria POS</b>, then switch to the <b>Parent App</b> — the purchase &amp; push notification appear instantly.</p>
+    </div>
+  </section>
+
+  <!-- ============ ADMIN ============ -->
+  <section id="admin" class="view">
+    <div class="admin-shell">
+      <aside class="sidebar">
+        <div class="s-brand">
+          <span class="logo"><svg viewBox="0 0 24 24" fill="none" width="20" height="20"><path d="M12 2.7 18.6 5.3v6c0 4.9-2.9 8.2-6.6 10-3.7-1.8-6.6-5.1-6.6-10v-6L12 2.7Z" stroke="#d9b44a" stroke-width="1.5" stroke-linejoin="round"/><path d="M8.5 11c1.15-.8 2.35-.8 3.5 0m0 0c1.15-.8 2.35-.8 3.5 0M12 11v4.4m-3.5-.6c1.15-.8 2.35-.8 3.5 0 1.15-.8 2.35-.8 3.5 0" stroke="#d9b44a" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"/><path d="m12 5.6.95 1.6L12 8.8l-.95-1.6L12 5.6Z" fill="#d9b44a"/></svg></span>
+          <div><b>St. Lawrence</b><small>CAMPUS CAFÉ · ADMIN</small></div>
+        </div>
+        <div class="nav-label">Overview</div>
+        <button class="nav-item active" data-page="dashboard"><svg viewBox="0 0 24 24" fill="none"><rect x="3" y="3" width="7" height="9" rx="1.5" stroke="currentColor" stroke-width="1.8"/><rect x="14" y="3" width="7" height="5" rx="1.5" stroke="currentColor" stroke-width="1.8"/><rect x="14" y="12" width="7" height="9" rx="1.5" stroke="currentColor" stroke-width="1.8"/><rect x="3" y="16" width="7" height="5" rx="1.5" stroke="currentColor" stroke-width="1.8"/></svg> Dashboard</button>
+        <div class="nav-label">Management</div>
+        <button class="nav-item" data-page="students"><svg viewBox="0 0 24 24" fill="none"><circle cx="9" cy="8" r="3.2" stroke="currentColor" stroke-width="1.8"/><path d="M3.5 19a5.5 5.5 0 0 1 11 0M16 11a3 3 0 0 0 0-6m4.5 14a4.5 4.5 0 0 0-3.5-4.4" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg> Students</button>
+        <button class="nav-item" data-page="menu"><svg viewBox="0 0 24 24" fill="none"><path d="M5 3v7m0 0a3 3 0 0 0 3-3V3M5 10v11M16 3c-1.5 0-3 1.8-3 5s1.5 5 3 5m0-10v18" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg> Menu</button>
+        <button class="nav-item" data-page="reports"><svg viewBox="0 0 24 24" fill="none"><path d="M4 20V10m6 10V4m6 16v-7" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg> Reports</button>
+        <button class="nav-item" data-page="alerts"><svg viewBox="0 0 24 24" fill="none"><path d="M18 8a6 6 0 1 0-12 0c0 7-3 9-3 9h18s-3-2-3-9M13.7 21a2 2 0 0 1-3.4 0" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg> Alerts <span class="nav-count" id="navAlertCount">0</span></button>
+        <div class="s-user">
+          <span class="avatar" style="background:linear-gradient(135deg,#35755a,#1b4936)">RK</span>
+          <div class="info"><b>Rajesh Kumar</b><small>Cafeteria Admin</small></div>
+        </div>
+      </aside>
+
+      <main class="admin-main">
+        <div class="topbar">
+          <div>
+            <h2 id="adminTitle">Dashboard</h2>
+            <div class="crumb" id="adminCrumb">St. Lawrence International School · Yadavagiri, Mysuru</div>
+          </div>
+          <label class="searchbox">
+            <svg viewBox="0 0 24 24" fill="none"><circle cx="11" cy="11" r="7" stroke="currentColor" stroke-width="1.8"/><path d="m20 20-3-3" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>
+            <input type="text" id="adminSearch" aria-label="Search students" placeholder="Search students…" />
+          </label>
+          <button class="icon-btn" id="topbarBell" aria-label="View alerts"><span class="ping" id="bellPing"></span><svg viewBox="0 0 24 24" fill="none"><path d="M18 8a6 6 0 1 0-12 0c0 7-3 9-3 9h18s-3-2-3-9M13.7 21a2 2 0 0 1-3.4 0" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
+        </div>
+
+        <div class="admin-body">
+          <!-- DASHBOARD -->
+          <div class="admin-page active" data-page="dashboard">
+            <div class="kpi-grid" id="kpiGrid"></div>
+            <div class="grid-2">
+              <div class="panel">
+                <div class="panel-head">
+                  <div><h3>Sales this week</h3><div class="sub">Revenue across lunch &amp; café</div></div>
+                  <div class="seg"><button class="active">7 days</button><button>30 days</button></div>
+                </div>
+                <div class="panel-body" id="chartArea"></div>
+              </div>
+              <div class="panel">
+                <div class="panel-head"><div><h3>Category mix</h3><div class="sub">Today's orders</div></div></div>
+                <div class="panel-body" id="donutArea"></div>
+              </div>
+            </div>
+            <div class="grid-2">
+              <div class="panel">
+                <div class="panel-head"><div><h3>Recent transactions</h3><div class="sub">Live feed from POS</div></div></div>
+                <div class="panel-body" style="padding:6px 8px"><div id="recentTxns"></div></div>
+              </div>
+              <div class="panel">
+                <div class="panel-head"><div><h3>Low balance alerts</h3><div class="sub">Below ₹100</div></div></div>
+                <div class="panel-body" style="padding:8px 12px"><div id="lowBalList"></div></div>
+              </div>
+            </div>
+          </div>
+
+          <!-- STUDENTS -->
+          <div class="admin-page" data-page="students">
+            <div class="toolbar">
+              <div class="chips" id="gradeChips"></div>
+              <button class="btn btn-primary" style="margin-left:auto" data-action="open-addbal"><svg viewBox="0 0 24 24" fill="none"><path d="M12 5v14M5 12h14" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg> Add balance</button>
+            </div>
+            <div class="panel"><div class="panel-body" style="padding:6px 6px"><table><thead><tr><th>Student</th><th>Grade</th><th>Wallet</th><th>Last order</th><th>Status</th><th></th></tr></thead><tbody id="studentRows"></tbody></table></div></div>
+          </div>
+
+          <!-- MENU -->
+          <div class="admin-page" data-page="menu">
+            <div class="toolbar">
+              <div class="chips" id="menuCatChips"></div>
+              <button class="btn btn-ghost" style="margin-left:auto"><svg viewBox="0 0 24 24" fill="none"><path d="M12 5v14M5 12h14" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg> New item</button>
+            </div>
+            <div class="menu-grid" id="menuMgmt"></div>
+          </div>
+
+          <!-- REPORTS -->
+          <div class="admin-page" data-page="reports">
+            <div class="toolbar">
+              <h3 style="font-size:16px">Sales &amp; revenue</h3>
+              <div style="margin-left:auto;display:flex;gap:10px">
+                <button class="btn btn-ghost" data-action="export"><svg viewBox="0 0 24 24" fill="none"><path d="M12 3v12m0 0 4-4m-4 4-4-4M5 21h14" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg> Export Excel</button>
+                <button class="btn btn-dark" data-action="export"><svg viewBox="0 0 24 24" fill="none"><path d="M12 3v12m0 0 4-4m-4 4-4-4M5 21h14" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg> Export PDF</button>
+              </div>
+            </div>
+            <div class="report-grid" id="reportCards"></div>
+            <div class="panel"><div class="panel-head"><div><h3>Top selling items</h3><div class="sub">By units sold this week</div></div></div><div class="panel-body" id="topItems"></div></div>
+          </div>
+
+          <!-- ALERTS -->
+          <div class="admin-page" data-page="alerts">
+            <div class="panel"><div class="panel-head"><div><h3>Notification log</h3><div class="sub">Every alert sent to parents — all in one place</div></div></div><div class="panel-body" style="padding:8px 12px"><div id="alertLog"></div></div></div>
+          </div>
+        </div>
+      </main>
+    </div>
+  </section>
+
+  <!-- ============ POS ============ -->
+  <section id="pos" class="view">
+    <div class="pos-shell">
+      <div class="pos-menu">
+        <div class="pos-head">
+          <div style="width:46px;height:46px;border-radius:13px;background:linear-gradient(135deg,var(--brand-400),var(--brand-600));display:grid;place-items:center;box-shadow:var(--shadow-brand)"><svg viewBox="0 0 24 24" fill="none" width="24" height="24"><rect x="4" y="2" width="16" height="20" rx="2" stroke="#fff" stroke-width="1.8"/><path d="M8 6h8M8 10h8M9 18h6" stroke="#fff" stroke-width="1.8" stroke-linecap="round"/></svg></div>
+          <div><h2>Counter 1 · Lunch service</h2><div class="sub">Tap items to add · scan a student to begin</div></div>
+        </div>
+        <div class="cat-tabs" id="posCatTabs"></div>
+        <div class="pos-items" id="posItems"></div>
+      </div>
+
+      <aside class="pos-cart">
+        <div class="cart-head"><h3><svg viewBox="0 0 24 24" fill="none" width="20" height="20"><path d="M6 6h15l-1.5 9h-12zM6 6 5 3H2m4 17a1 1 0 1 0 0 2 1 1 0 0 0 0-2m11 0a1 1 0 1 0 0 2 1 1 0 0 0 0-2" stroke="var(--brand-600)" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg> Current order</h3></div>
+
+        <div id="scanZone" class="scan-zone">
+          <div class="scan-box">
+            <div class="qic"><svg viewBox="0 0 24 24" fill="none"><rect x="3" y="3" width="7" height="7" rx="1" stroke="#fff" stroke-width="1.8"/><rect x="14" y="3" width="7" height="7" rx="1" stroke="#fff" stroke-width="1.8"/><rect x="3" y="14" width="7" height="7" rx="1" stroke="#fff" stroke-width="1.8"/><path d="M14 14h3v3m4 0v4m-7 0h3" stroke="#fff" stroke-width="1.8" stroke-linecap="round"/></svg></div>
+            <div class="scan-txt"><b>Scan student QR / ID</b><small>or enter ID manually below</small></div>
+          </div>
+          <div class="scan-pick">
+            <div class="scan-input">
+              <input type="text" id="scanInput" placeholder="e.g. STU-04 or name" />
+              <button class="btn btn-dark" data-action="scan-go">Find</button>
+            </div>
+            <div class="quick-students" id="quickStudents"></div>
+          </div>
+        </div>
+
+        <div id="cartStudent"></div>
+        <div class="cart-items" id="cartItems"></div>
+        <div class="cart-foot" id="cartFoot" style="display:none"></div>
+      </aside>
+    </div>
+  </section>
+
+  <!-- ============ PARENT ============ -->
+  <section id="parent" class="view">
+    <div class="parent-stage">
+      <div class="parent-pitch">
+        <span class="eyebrow"><svg viewBox="0 0 24 24" fill="none" width="14" height="14"><path d="M18 8a6 6 0 1 0-12 0c0 7-3 9-3 9h18s-3-2-3-9" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg> Parent Experience</span>
+        <h2>Know exactly what your child eats &amp; spends — the moment it happens.</h2>
+        <p>No more cash in pockets or missing lunch money. Recharge in seconds, get a push the instant they buy, and see a full transparent history.</p>
+        <div class="feat-list">
+          <div class="feat"><div class="fic"><svg viewBox="0 0 24 24" fill="none"><rect x="2" y="5" width="20" height="14" rx="3" stroke="currentColor" stroke-width="1.8"/><path d="M2 10h20" stroke="currentColor" stroke-width="1.8"/></svg></div><div><b>One-tap recharge</b><p>Top up the wallet via UPI, card, or netbanking.</p></div></div>
+          <div class="feat"><div class="fic"><svg viewBox="0 0 24 24" fill="none"><path d="M18 8a6 6 0 1 0-12 0c0 7-3 9-3 9h18s-3-2-3-9M13.7 21a2 2 0 0 1-3.4 0" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></div><div><b>Instant purchase alerts</b><p>Item bought + remaining balance, in real time.</p></div></div>
+          <div class="feat"><div class="fic"><svg viewBox="0 0 24 24" fill="none"><path d="M12 8v4l3 2" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/><circle cx="12" cy="12" r="9" stroke="currentColor" stroke-width="1.8"/></svg></div><div><b>Full transaction history</b><p>Every order, date, and amount — fully transparent.</p></div></div>
+        </div>
+      </div>
+
+      <div class="phone-wrap">
+        <div class="phone">
+          <div class="notch"></div>
+          <div class="screen">
+            <div class="statusbar">
+              <span id="pClock">9:41</span>
+              <div class="sb-r">
+                <svg viewBox="0 0 24 24" fill="currentColor"><path d="M2 17h2v3H2zm4-3h2v6H6zm4-4h2v10h-2zm4-3h2v13h-2zm4-3h2v16h-2z"/></svg>
+                <svg viewBox="0 0 24 24" fill="none"><path d="M5 13a10 10 0 0 1 14 0M8.5 16.5a5 5 0 0 1 7 0M12 20h.01" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>
+                <svg viewBox="0 0 24 24" fill="none"><rect x="2" y="7" width="18" height="10" rx="2.5" stroke="currentColor" stroke-width="1.6"/><rect x="4" y="9" width="13" height="6" rx="1" fill="currentColor"/><path d="M22 10v4" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>
+              </div>
+            </div>
+            <div class="p-screen" id="pScreen">
+              <!-- HOME -->
+              <div class="p-view active" data-pview="home" id="pHome"></div>
+              <!-- HISTORY -->
+              <div class="p-view" data-pview="history" id="pHistory"></div>
+              <!-- NOTIFS -->
+              <div class="p-view" data-pview="notifs" id="pNotifs"></div>
+              <!-- MESSAGES -->
+              <div class="p-view" data-pview="messages" id="pMessages"></div>
+              <!-- RECHARGE -->
+              <div class="p-view" data-pview="recharge" id="pRecharge"></div>
+            </div>
+            <nav class="p-tabbar" id="pTabbar">
+              <button class="p-tab active" data-pgo="home"><svg viewBox="0 0 24 24" fill="none"><path d="M3 10 12 3l9 7v9a2 2 0 0 1-2 2h-4v-6H9v6H5a2 2 0 0 1-2-2z" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>Home</button>
+              <button class="p-tab" data-pgo="history"><svg viewBox="0 0 24 24" fill="none"><path d="M12 8v4l3 2" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/><circle cx="12" cy="12" r="9" stroke="currentColor" stroke-width="1.8"/></svg>History</button>
+              <div class="p-tab-wrap"><button class="p-tab" data-pgo="notifs"><svg viewBox="0 0 24 24" fill="none"><path d="M18 8a6 6 0 1 0-12 0c0 7-3 9-3 9h18s-3-2-3-9M13.7 21a2 2 0 0 1-3.4 0" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>Alerts<span class="pt-badge" id="pNotifBadge" style="display:none">0</span></button></div>
+              <button class="p-tab" data-pgo="messages"><svg viewBox="0 0 24 24" fill="none"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>Messages</button>
+            </nav>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+</div>
+
+<!-- ============ MODAL ROOT ============ -->
+<div class="modal-overlay" id="modalRoot"><div id="modalInner"></div></div>
+
+<!-- ============ TOASTS ============ -->
+<div class="toast-wrap" id="toastWrap"></div>
+
+<script>
+/* ============================================================
+   ICONS
+   ============================================================ */
+const I = {
+  wallet:'<path d="M2 7a3 3 0 0 1 3-3h12a2 2 0 0 1 2 2v1m-17 0v10a3 3 0 0 0 3 3h12a2 2 0 0 0 2-2v-3m0-5h-4a2 2 0 0 0 0 4h4a1 1 0 0 0 1-1v-2a1 1 0 0 0-1-1" stroke="currentColor" stroke-width="1.8" fill="none" stroke-linecap="round" stroke-linejoin="round"/>',
+  cash:'<rect x="2" y="5" width="20" height="14" rx="2.5" stroke="currentColor" stroke-width="1.8" fill="none"/><circle cx="12" cy="12" r="3" stroke="currentColor" stroke-width="1.8" fill="none"/>',
+  users:'<circle cx="9" cy="8" r="3.2" stroke="currentColor" stroke-width="1.8" fill="none"/><path d="M3.5 19a5.5 5.5 0 0 1 11 0M16 11a3 3 0 0 0 0-6m4.5 14a4.5 4.5 0 0 0-3.5-4.4" stroke="currentColor" stroke-width="1.8" fill="none" stroke-linecap="round"/>',
+  bell:'<path d="M18 8a6 6 0 1 0-12 0c0 7-3 9-3 9h18s-3-2-3-9M13.7 21a2 2 0 0 1-3.4 0" stroke="currentColor" stroke-width="1.8" fill="none" stroke-linecap="round" stroke-linejoin="round"/>',
+  up:'<path d="M12 19V5m0 0-7 7m7-7 7 7" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"/>',
+  down:'<path d="M12 5v14m0 0 7-7m-7 7-7-7" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"/>',
+  check:'<path d="M5 13l4 4L19 7" stroke="currentColor" stroke-width="2.4" fill="none" stroke-linecap="round" stroke-linejoin="round"/>',
+  x:'<path d="M6 6l12 12M18 6 6 18" stroke="currentColor" stroke-width="2.2" fill="none" stroke-linecap="round"/>',
+  plus:'<path d="M12 5v14M5 12h14" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round"/>',
+  minus:'<path d="M5 12h14" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round"/>',
+  alert:'<path d="M12 9v4m0 4h.01M10.3 3.9 1.8 18a2 2 0 0 0 1.7 3h17a2 2 0 0 0 1.7-3L13.7 3.9a2 2 0 0 0-3.4 0Z" stroke="currentColor" stroke-width="1.8" fill="none" stroke-linecap="round" stroke-linejoin="round"/>',
+  trend:'<path d="M22 7 13.5 15.5 8.5 10.5 2 17" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"/><path d="M16 7h6v6" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"/>',
+  clock:'<circle cx="12" cy="12" r="9" stroke="currentColor" stroke-width="1.8" fill="none"/><path d="M12 8v4l3 2" stroke="currentColor" stroke-width="1.8" fill="none" stroke-linecap="round"/>',
+  send:'<path d="M22 2 11 13M22 2l-7 20-4-9-9-4z" stroke="currentColor" stroke-width="1.8" fill="none" stroke-linecap="round" stroke-linejoin="round"/>',
+  store:'<path d="M3 9 4.5 4h15L21 9m-18 0a2.5 2.5 0 0 0 5 0 2.5 2.5 0 0 0 5 0 2.5 2.5 0 0 0 5 0M5 9v11h14V9" stroke="currentColor" stroke-width="1.8" fill="none" stroke-linecap="round" stroke-linejoin="round"/>',
+  refresh:'<path d="M3 12a9 9 0 0 1 15-6.6L21 8M21 3v5h-5M21 12a9 9 0 0 1-15 6.6L3 16m0 5v-5h5" stroke="currentColor" stroke-width="1.9" fill="none" stroke-linecap="round" stroke-linejoin="round"/>',
+  back:'<path d="M15 18l-6-6 6-6" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"/>',
+};
+const svg=(p,c='')=>`<svg viewBox="0 0 24 24" ${c?`class="${c}"`:''}>${p}</svg>`;
+
+/* ============================================================
+   SEED DATA
+   ============================================================ */
+const AV_COLORS=['#35755a','#2e7f94','#c9a227','#c57b3a','#7a5ea8','#22677a','#5c9679','#b0563f','#8a6d14','#3f6e52'];
+function seed(){
+ return {
+  students:[
+    {id:'STU-01',name:'Aarav Sharma',grade:8,balance:420,allergy:'Peanuts',parent:'+91 98••• ••210'},
+    {id:'STU-02',name:'Diya Patel',grade:6,balance:85,allergy:null,parent:'+91 99••• ••114'},
+    {id:'STU-03',name:'Vivaan Reddy',grade:10,balance:1250,allergy:'Lactose',parent:'+91 90••• ••338'},
+    {id:'STU-04',name:'Ananya Singh',grade:7,balance:40,allergy:'Gluten',parent:'+91 87••• ••902'},
+    {id:'STU-05',name:'Aditya Kumar',grade:9,balance:680,allergy:null,parent:'+91 98••• ••551'},
+    {id:'STU-06',name:'Ishaan Gupta',grade:11,balance:25,allergy:null,parent:'+91 96••• ••777'},
+    {id:'STU-07',name:'Saanvi Joshi',grade:6,balance:530,allergy:'Eggs',parent:'+91 81••• ••460'},
+    {id:'STU-08',name:'Kabir Mehta',grade:12,balance:920,allergy:null,parent:'+91 99••• ••019'},
+    {id:'STU-09',name:'Myra Nair',grade:8,balance:260,allergy:'Seafood',parent:'+91 70••• ••683'},
+    {id:'STU-10',name:'Reyansh Iyer',grade:7,balance:150,allergy:null,parent:'+91 80••• ••245'},
+  ],
+  menu:[
+    {id:'M01',name:'Idli & Sambar',price:40,em:'🍛',cat:'Breakfast',tags:['Veg','220 kcal'],stock:24,on:true},
+    {id:'M02',name:'Poha',price:30,em:'🍚',cat:'Breakfast',tags:['Veg','180 kcal'],stock:18,on:true},
+    {id:'M03',name:'Masala Dosa',price:50,em:'🫓',cat:'Breakfast',tags:['Veg','290 kcal'],stock:12,on:true},
+    {id:'M04',name:'Bread Omelette',price:45,em:'🍳',cat:'Breakfast',tags:['Egg','310 kcal'],stock:0,on:true},
+    {id:'M05',name:'Veg Thali',price:80,em:'🍱',cat:'Lunch',tags:['Veg','520 kcal'],stock:30,on:true},
+    {id:'M06',name:'Rajma Chawal',price:70,em:'🍛',cat:'Lunch',tags:['Veg','480 kcal'],stock:22,on:true},
+    {id:'M07',name:'Paneer Roll',price:60,em:'🌯',cat:'Lunch',tags:['Veg','Dairy','390 kcal'],stock:16,on:true},
+    {id:'M08',name:'Chole Bhature',price:75,em:'🍽️',cat:'Lunch',tags:['Veg','610 kcal'],stock:14,on:true},
+    {id:'M09',name:'Samosa',price:20,em:'🥟',cat:'Snacks',tags:['Veg','150 kcal'],stock:40,on:true},
+    {id:'M10',name:'Veg Sandwich',price:40,em:'🥪',cat:'Snacks',tags:['Veg','260 kcal'],stock:20,on:true},
+    {id:'M11',name:'French Fries',price:50,em:'🍟',cat:'Snacks',tags:['Veg','320 kcal'],stock:25,on:true},
+    {id:'M12',name:'Veg Pasta',price:65,em:'🍝',cat:'Snacks',tags:['Veg','Dairy','410 kcal'],stock:0,on:false},
+    {id:'M13',name:'Masala Chai',price:15,em:'🍵',cat:'Beverages',tags:['Dairy','90 kcal'],stock:60,on:true},
+    {id:'M14',name:'Cold Coffee',price:45,em:'🥤',cat:'Beverages',tags:['Dairy','210 kcal'],stock:30,on:true},
+    {id:'M15',name:'Fresh Juice',price:40,em:'🧃',cat:'Beverages',tags:['Vegan','110 kcal'],stock:28,on:true},
+    {id:'M16',name:'Lassi',price:35,em:'🥛',cat:'Beverages',tags:['Dairy','190 kcal'],stock:20,on:true},
+  ],
+  txns:[
+    {id:1,sid:'STU-01',type:'buy',title:'Veg Thali, Lassi',amount:115,balAfter:420,time:'Today, 12:42 PM',day:'Today'},
+    {id:2,sid:'STU-03',type:'buy',title:'Chole Bhature, Cold Coffee',amount:120,balAfter:1250,time:'Today, 12:35 PM',day:'Today'},
+    {id:3,sid:'STU-05',type:'add',title:'Wallet recharge',amount:500,balAfter:680,time:'Today, 8:10 AM',day:'Today'},
+    {id:4,sid:'STU-09',type:'buy',title:'Paneer Roll, Fresh Juice',amount:100,balAfter:260,time:'Yesterday, 1:05 PM',day:'Yesterday'},
+    {id:5,sid:'STU-01',type:'buy',title:'Samosa x2, Masala Chai',amount:55,balAfter:535,time:'Yesterday, 11:20 AM',day:'Yesterday'},
+    {id:6,sid:'STU-01',type:'add',title:'Wallet recharge',amount:500,balAfter:590,time:'Yesterday, 7:45 AM',day:'Yesterday'},
+  ],
+  notifs:[
+    {id:1,sid:'STU-01',type:'buy',title:'Purchase at cafeteria',body:'Aarav bought Veg Thali, Lassi (₹115). Balance: ₹420.',time:'Today, 12:42 PM',unread:true},
+    {id:2,sid:'STU-04',type:'low',title:'Low balance alert',body:'Ananya\'s wallet is below ₹100. Recharge to avoid declined orders.',time:'Today, 9:30 AM',unread:true},
+    {id:3,sid:'STU-01',type:'add',title:'Recharge successful',body:'₹500 added to Aarav\'s wallet via UPI.',time:'Yesterday, 7:45 AM',unread:false},
+  ],
+  messages:[
+    {dir:'in',text:'Hi! Please note Aarav is allergic to peanuts — kindly avoid peanut items.',time:'Mon, 9:12 AM'},
+    {dir:'out',text:'Noted, thank you. We\'ve flagged it on his profile. 🙂',time:'Mon, 9:40 AM'},
+  ],
+  salesWeek:[8400,9200,7600,10400,11200,6800,9800], // Mon..Sun
+  catMix:[{k:'Lunch',v:46,c:'#35755a'},{k:'Snacks',v:28,c:'#c9a227'},{k:'Beverages',v:17,c:'#2e7f94'},{k:'Breakfast',v:9,c:'#c57b3a'}],
+ };
+}
+let DB=seed();
+
+/* runtime ui state */
+const UI={role:'login',adminPage:'dashboard',gradeFilter:'All',menuCat:'All',
+  posCat:'Breakfast',posCart:[],posStudent:null,
+  parentTab:'home',parentChild:'STU-01',rechargeAmt:200,payMethod:'upi'};
+
+/* ============================================================
+   HELPERS
+   ============================================================ */
+const $=s=>document.querySelector(s);
+const $$=s=>[...document.querySelectorAll(s)];
+const money=n=>'₹'+Number(n).toLocaleString('en-IN');
+const studentById=id=>DB.students.find(s=>s.id===id);
+const initials=n=>n.split(' ').map(w=>w[0]).slice(0,2).join('').toUpperCase();
+const avColor=id=>AV_COLORS[(parseInt(id.replace(/\D/g,''))-1)%AV_COLORS.length];
+const LOW=100;
+const TODAY_LABEL=new Date().toLocaleDateString('en-IN',{weekday:'long',day:'numeric',month:'long'});
+function nowTime(){const d=new Date();let h=d.getHours(),m=d.getMinutes();const ap=h>=12?'PM':'AM';h=h%12||12;return `Today, ${h}:${String(m).padStart(2,'0')} ${ap}`;}
+function clockStr(){const d=new Date();let h=d.getHours(),m=d.getMinutes();h=h%12||12;return `${h}:${String(m).padStart(2,'0')}`;}
+
+/* ============================================================
+   TOASTS  (channel: 'admin'|'pos'|'parent'|'sms')
+   ============================================================ */
+function toast({color='green',icon=I.check,title,src,body}){
+  const w=$('#toastWrap');
+  const el=document.createElement('div');
+  el.className='toast '+color;
+  el.innerHTML=`<div class="t-ic">${svg(icon)}</div>
+    <div class="t-body"><b>${title}${src?` <span class="src">· ${src}</span>`:''}</b><p>${body}</p></div>
+    <div class="t-prog"></div>`;
+  w.appendChild(el);
+  setTimeout(()=>{el.classList.add('out');setTimeout(()=>el.remove(),320);},4200);
+}
+
+/* ============================================================
+   CORE ACTIONS  (the shared business logic)
+   ============================================================ */
+function pushNotification(sid,type,title,body){
+  const n={id:Date.now()+Math.floor(Math.random()*999),sid,type,title,body,time:nowTime(),unread:true};
+  DB.notifs.unshift(n);
+  return n;
+}
+function placeOrder(sid,cart){
+  const stu=studentById(sid);
+  const total=cart.reduce((s,c)=>s+c.price*c.qty,0);
+  const itemsLabel=cart.map(c=>c.qty>1?`${c.name} x${c.qty}`:c.name).join(', ');
+  if(stu.balance>=total){
+    stu.balance-=total;
+    cart.forEach(c=>{const mi=DB.menu.find(x=>x.id===c.id);if(mi)mi.stock=Math.max(0,mi.stock-c.qty);}); // decrement stock
+    DB.txns.unshift({id:Date.now(),sid,type:'buy',title:itemsLabel,amount:total,balAfter:stu.balance,time:nowTime(),day:'Today'});
+    pushNotification(sid,'buy','Purchase at cafeteria',`${stu.name.split(' ')[0]} bought ${itemsLabel} (${money(total)}). Balance: ${money(stu.balance)}.`);
+    // SMS + push fan-out (mirrors flowchart)
+    toast({color:'sky',icon:I.bell,src:'Push → Parent',title:'Order confirmed',body:`${itemsLabel} · ${money(total)}. Sent to ${stu.parent}.`});
+    if(stu.balance<LOW){
+      pushNotification(sid,'low','Low balance alert',`${stu.name.split(' ')[0]}'s wallet is now ${money(stu.balance)} — below ₹100. Please recharge.`);
+      setTimeout(()=>toast({color:'amber',icon:I.alert,src:'Auto-alert',title:'Low balance',body:`${stu.name}: ${money(stu.balance)} left.`}),700);
+    }
+    return {ok:true,total,itemsLabel,balAfter:stu.balance};
+  }else{
+    // guard: don't re-log an identical decline if it's already the latest txn for this student
+    const last=DB.txns.find(t=>t.sid===sid);
+    const dup=last&&last.type==='dec'&&last.amount===total;
+    if(!dup){
+      DB.txns.unshift({id:Date.now(),sid,type:'dec',title:itemsLabel+' (declined)',amount:total,balAfter:stu.balance,time:nowTime(),day:'Today'});
+      pushNotification(sid,'low','Order declined — low balance',`${stu.name.split(' ')[0]}'s order (${money(total)}) was declined. Balance ${money(stu.balance)} is too low. Please recharge.`);
+    }
+    toast({color:'rose',icon:I.x,src:'Push → Parent',title:'Order declined',body:`Insufficient balance (${money(stu.balance)} / ${money(total)}).`});
+    return {ok:false,total,itemsLabel,balAfter:stu.balance};
+  }
+}
+function addBalance(sid,amt,via='Admin top-up'){
+  const stu=studentById(sid);
+  stu.balance+=amt;
+  DB.txns.unshift({id:Date.now(),sid,type:'add',title:via,amount:amt,balAfter:stu.balance,time:nowTime(),day:'Today'});
+  pushNotification(sid,'add','Recharge successful',`${money(amt)} added to ${stu.name.split(' ')[0]}'s wallet. Balance: ${money(stu.balance)}.`);
+  return stu;
+}
+
+/* ============================================================
+   ROLE / VIEW ROUTING
+   ============================================================ */
+const REDUCED=matchMedia('(prefers-reduced-motion: reduce)').matches;
+function countUp(el,dur=750){
+  if(!el||REDUCED)return;
+  const txt=el.textContent,num=parseInt(txt.replace(/[^\d]/g,''),10);
+  if(!num)return;
+  const pfx=txt.includes('₹')?'₹':'';
+  const t0=performance.now();
+  (function f(t){
+    const p=Math.min(1,(t-t0)/dur),e=1-Math.pow(1-p,3);
+    el.textContent=pfx+Math.round(num*e).toLocaleString('en-IN');
+    if(p<1)requestAnimationFrame(f);else el.textContent=txt;
+  })(t0);
+}
+function setRole(r){
+  UI.role=r;
+  $$('#roleSwitch button').forEach(b=>{const on=b.dataset.role===r;b.classList.toggle('active',on);b.setAttribute('aria-pressed',on);});
+  $$('.stage > .view').forEach(v=>v.classList.toggle('active',v.id===r));
+  window.scrollTo({top:0});
+  if(r==='admin'){renderAdmin();$$('#admin .kpi-val').forEach(el=>countUp(el));}
+  if(r==='pos')renderPOS();
+  if(r==='parent'){renderParent();countUp($('#parent .wc-bal'));}
+}
+
+/* ============================================================
+   ADMIN RENDERS
+   ============================================================ */
+function adminMetrics(){
+  const totalWallet=DB.students.reduce((s,x)=>s+x.balance,0);
+  const todaySales=DB.txns.filter(t=>t.day==='Today'&&t.type==='buy').reduce((s,t)=>s+t.amount,0);
+  const lowCount=DB.students.filter(s=>s.balance<LOW).length;
+  return {totalWallet,todaySales,active:DB.students.length,lowCount};
+}
+function renderKPIs(){
+  const m=adminMetrics();
+  $('#kpiGrid').innerHTML=[
+    {c:'c1',ic:I.wallet,val:money(m.totalWallet),lbl:'Total wallet balance',d:'+8.2%',up:true},
+    {c:'c2',ic:I.cash,val:money(m.todaySales),lbl:"Today's sales",d:'+12.4%',up:true},
+    {c:'c3',ic:I.users,val:m.active,lbl:'Active students',d:'+3',up:true},
+    {c:'c4',ic:I.alert,val:m.lowCount,lbl:'Low-balance alerts',d:m.lowCount>2?'needs action':'all clear',up:false,neutral:m.lowCount<=2},
+  ].map(k=>`<div class="kpi ${k.c}"><div class="kpi-top"><div class="kpi-ic">${svg(k.ic)}</div>
+    <span class="delta ${k.up?'up':k.neutral?'flat':'down'}">${k.up?svg(I.up):''}${k.d}</span></div>
+    <div class="kpi-val mono">${k.val}</div><div class="kpi-label">${k.lbl}</div></div>`).join('');
+  const nb=$('#navAlertCount');nb.textContent=m.lowCount;nb.style.display=m.lowCount?'':'none';
+  const bp=$('#bellPing');if(bp)bp.style.display=m.lowCount?'':'none';
+}
+function renderChart(){
+  const data=DB.salesWeek,labels=['Mon','Tue','Wed','Thu','Fri','Sat','Sun'];
+  const W=560,H=210,pad=30,max=Math.max(...data)*1.15;
+  const x=i=>pad+i*((W-pad*2)/(data.length-1));
+  const y=v=>H-pad-(v/max)*(H-pad*2);
+  let line=data.map((v,i)=>`${i?'L':'M'}${x(i).toFixed(1)},${y(v).toFixed(1)}`).join(' ');
+  let area=`M${x(0)},${H-pad} `+data.map((v,i)=>`L${x(i).toFixed(1)},${y(v).toFixed(1)}`).join(' ')+` L${x(data.length-1)},${H-pad} Z`;
+  const grid=[0,.25,.5,.75,1].map(g=>{const gy=pad+g*(H-pad*2);return `<line x1="${pad}" y1="${gy}" x2="${W-pad}" y2="${gy}" stroke="#e9ede4" stroke-width="1"/>`}).join('');
+  const dots=data.map((v,i)=>`<circle cx="${x(i).toFixed(1)}" cy="${y(v).toFixed(1)}" r="4" fill="#fff" stroke="#245c46" stroke-width="2.5"><title>${labels[i]}: ${money(v)}</title></circle>`).join('');
+  const xl=labels.map((l,i)=>`<text x="${x(i).toFixed(1)}" y="${H-8}" text-anchor="middle" font-size="11" fill="#8ca096" font-weight="600">${l}</text>`).join('');
+  $('#chartArea').innerHTML=`<svg viewBox="0 0 ${W} ${H}" style="width:100%;height:auto;overflow:visible">
+    <defs><linearGradient id="ag" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#245c46" stop-opacity=".20"/><stop offset="1" stop-color="#245c46" stop-opacity="0"/></linearGradient></defs>
+    ${grid}<path d="${area}" fill="url(#ag)"/><path d="${line}" fill="none" stroke="#245c46" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>${dots}${xl}</svg>
+    <div class="legend"><div class="lg"><span class="sw" style="background:#245c46"></span>Weekly revenue <b>${money(data.reduce((a,b)=>a+b,0))}</b></div><div class="lg"><span class="sw" style="background:#c9a227"></span>Peak <b>${money(Math.max(...data))}</b> (Fri)</div></div>`;
+}
+function liveCatMix(){
+  const COL={Lunch:'#35755a',Snacks:'#c9a227',Beverages:'#2e7f94',Breakfast:'#c57b3a'};
+  const name2cat={};DB.menu.forEach(m=>name2cat[m.name]=m.cat);
+  const count={Lunch:0,Snacks:0,Beverages:0,Breakfast:0};let tot=0;
+  DB.txns.filter(t=>t.day==='Today'&&t.type==='buy').forEach(t=>{
+    t.title.split(',').forEach(part=>{
+      const mq=part.trim().match(/^(.*?)(?:\sx(\d+))?$/);
+      const nm=mq[1].trim(),q=+(mq[2]||1),cat=name2cat[nm];
+      if(cat){count[cat]+=q;tot+=q;}
+    });
+  });
+  if(!tot)return DB.catMix; // fallback to baseline before any activity
+  return Object.keys(count).filter(k=>count[k]>0).map(k=>({k,v:Math.round(count[k]/tot*100),c:COL[k]}));
+}
+function renderDonut(){
+  const data=liveCatMix(),R=70,C=2*Math.PI*R;let off=0;
+  const segs=data.map(d=>{const len=C*d.v/100;const s=`<circle cx="90" cy="90" r="${R}" fill="none" stroke="${d.c}" stroke-width="22" stroke-dasharray="${len.toFixed(2)} ${(C-len).toFixed(2)}" stroke-dashoffset="${(-off).toFixed(2)}" transform="rotate(-90 90 90)" stroke-linecap="butt"/>`;off+=len;return s;}).join('');
+  const leg=data.map(d=>`<div class="lg"><span class="sw" style="background:${d.c}"></span>${d.k} <b>${d.v}%</b></div>`).join('');
+  $('#donutArea').innerHTML=`<div style="display:flex;align-items:center;gap:18px;flex-wrap:wrap"><div style="position:relative;flex:none"><svg width="180" height="180" viewBox="0 0 180 180">${segs}</svg>
+    <div style="position:absolute;inset:0;display:grid;place-items:center;text-align:center"><div><div style="font-family:var(--display);font-size:24px;font-weight:800">${DB.txns.filter(t=>t.day==='Today'&&t.type==='buy').length}</div><div style="font-size:11px;color:var(--ink-mute)">orders today</div></div></div></div>
+    <div class="legend" style="flex-direction:column;gap:11px">${leg}</div></div>`;
+}
+function txnRow(t){
+  const stu=studentById(t.sid);
+  const map={buy:{c:'buy',em:'🍽️',cls:'minus',pfx:'−'},add:{c:'add',em:'💰',cls:'plus',pfx:'+'},dec:{c:'dec',em:'⚠️',cls:'dec',pfx:''}};
+  const m=map[t.type];
+  return `<div class="txn"><div class="tx-ic ${m.c}">${m.em}</div>
+    <div class="tx-info"><b>${t.title}</b><small>${stu?stu.name:''} · ${t.time}</small></div>
+    <div class="tx-amt ${m.cls}">${m.pfx}${money(t.amount)}<small>${t.type==='dec'?'declined':'Bal '+money(t.balAfter)}</small></div></div>`;
+}
+function renderRecent(){
+  $('#recentTxns').innerHTML=DB.txns.slice(0,6).map(txnRow).join('')||'<div class="empty-mini">No transactions yet.</div>';
+}
+function renderLowBal(){
+  const low=DB.students.filter(s=>s.balance<LOW).sort((a,b)=>a.balance-b.balance);
+  $('#lowBalList').innerHTML=low.length?low.map(s=>`<div class="alert-row">
+    <span class="avatar" style="background:${avColor(s.id)}">${initials(s.name)}</span>
+    <div><b style="font-size:13.5px;font-weight:600">${s.name}</b><div style="font-size:12px;color:var(--ink-mute)">Grade ${s.grade} · ${s.id}</div></div>
+    <div class="amt"><b class="bal low">${money(s.balance)}</b><button class="badge badge-green" style="border:none;cursor:pointer;margin-top:3px" data-action="quick-topup" data-id="${s.id}">+ Top up</button></div></div>`).join('')
+    :'<div class="empty-mini">🎉 All students above ₹100.</div>';
+}
+function renderStudents(){
+  $('#gradeChips').innerHTML=['All',6,7,8,9,10,11,12].map(g=>`<button class="chip ${UI.gradeFilter==g?'active':''}" data-grade="${g}" aria-pressed="${UI.gradeFilter==g}">${g==='All'?'All grades':'Grade '+g}</button>`).join('');
+  let list=DB.students.slice().sort((a,b)=>a.name.localeCompare(b.name));
+  if(UI.gradeFilter!=='All')list=list.filter(s=>s.grade==UI.gradeFilter);
+  const q=(UI.studentSearch||'').trim().toLowerCase();
+  if(q)list=list.filter(s=>s.name.toLowerCase().includes(q)||s.id.toLowerCase().includes(q));
+  $('#studentRows').innerHTML=list.map(s=>{
+    const last=DB.txns.find(t=>t.sid===s.id&&t.type==='buy');
+    const low=s.balance<LOW;
+    return `<tr><td><div class="td-user"><span class="avatar" style="background:${avColor(s.id)}">${initials(s.name)}</span><div><b>${s.name}</b><small>${s.id}${s.allergy?` · ⚠ ${s.allergy}`:''}</small></div></div></td>
+      <td><span class="badge badge-slate">Grade ${s.grade}</span></td>
+      <td><span class="bal ${low?'low':''}">${money(s.balance)}</span></td>
+      <td style="color:var(--ink-soft);font-size:13px">${last?last.title.split(',')[0]+' · '+last.time.replace('Today, ','').replace('Yesterday, ','Yd '):'—'}</td>
+      <td>${low?'<span class="badge badge-rose"><span class="dot"></span>Low balance</span>':'<span class="badge badge-green"><span class="dot"></span>Active</span>'}</td>
+      <td style="text-align:right"><button class="btn btn-ghost" style="padding:7px 12px;font-size:13px" data-action="quick-topup" data-id="${s.id}">Add balance</button></td></tr>`;
+  }).join('')||'<tr><td colspan="6" class="empty-mini">No students in this grade.</td></tr>';
+}
+function renderMenuMgmt(){
+  const cats=['All','Breakfast','Lunch','Snacks','Beverages'];
+  $('#menuCatChips').innerHTML=cats.map(c=>`<button class="chip ${UI.menuCat===c?'active':''}" data-menucat="${c}" aria-pressed="${UI.menuCat===c}">${c}</button>`).join('');
+  let items=DB.menu.filter(m=>UI.menuCat==='All'||m.cat===UI.menuCat);
+  $('#menuMgmt').innerHTML=items.map(m=>`<div class="menu-card">
+    <div class="pic">${m.em}<span class="cat badge badge-slate">${m.cat}</span>${m.stock<=0?'<span class="stock badge badge-rose">Out</span>':m.stock<8?`<span class="stock badge badge-amber">${m.stock} left</span>`:''}</div>
+    <div class="mc-body"><div class="name"><span>${m.name}</span><span class="price">${money(m.price)}</span></div>
+    <div class="tags">${m.tags.map(t=>`<span class="badge ${t.includes('kcal')?'badge-slate':t==='Veg'||t==='Vegan'?'badge-green':'badge-amber'}">${t}</span>`).join('')}</div>
+    <div class="mc-foot"><span style="font-size:12px;color:var(--ink-mute)">Stock: <b>${m.stock}</b></span>
+    <div class="toggle"><span id="sw-lbl-${m.id}">${m.on?'Available':'Hidden'}</span><button type="button" role="switch" aria-checked="${m.on}" aria-labelledby="sw-lbl-${m.id}" class="switch ${m.on?'on':''}" data-action="toggle-menu" data-id="${m.id}"></button></div></div></div></div>`).join('');
+}
+function renderReports(){
+  const m=adminMetrics();
+  const weekRev=DB.salesWeek.reduce((a,b)=>a+b,0);
+  const cards=[
+    {lbl:'Revenue this week',val:money(weekRev),pct:78},
+    {lbl:'Avg. order value',val:money(Math.round(weekRev/210)),pct:54},
+    {lbl:'Wallet float held',val:money(m.totalWallet),pct:65},
+  ];
+  $('#reportCards').innerHTML=cards.map(c=>`<div class="panel rep-card"><div class="lbl">${c.lbl}</div><div class="val mono">${c.val}</div><div class="bar"><i style="width:${c.pct}%"></i></div></div>`).join('');
+  const top=[['Veg Thali',182,'🍱'],['Samosa',164,'🥟'],['Masala Chai',151,'🍵'],['Cold Coffee',98,'🥤'],['French Fries',86,'🍟']];
+  const mx=top[0][1];
+  $('#topItems').innerHTML=top.map(([n,v,e])=>`<div style="display:flex;align-items:center;gap:12px;padding:9px 0">
+    <span style="font-size:22px;width:30px">${e}</span><div style="flex:1"><div style="display:flex;justify-content:space-between;font-size:13.5px;font-weight:600"><span>${n}</span><span class="mono muted">${v} sold</span></div>
+    <div class="bar" style="height:7px;border-radius:99px;background:var(--slate-100);margin-top:6px;overflow:hidden"><i style="display:block;height:100%;width:${(v/mx*100).toFixed(0)}%;background:linear-gradient(90deg,var(--brand-400),var(--brand-600));border-radius:99px"></i></div></div></div>`).join('');
+}
+function renderAlertLog(){
+  const icmap={buy:{c:'#35755a',i:I.cash},add:{c:'#2e7f94',i:I.wallet},low:{c:'#dd930f',i:I.alert}};
+  $('#alertLog').innerHTML=DB.notifs.map(n=>{const m=icmap[n.type]||icmap.buy;const stu=studentById(n.sid);
+    return `<div class="notif ${n.unread?'unread':''}"><div class="nt-ic" style="background:${m.c}">${svg(m.i)}</div>
+    <div class="nt-body" style="flex:1"><b>${n.title}</b><p>${n.body}</p><small>${stu?stu.name+' · ':''}${n.time} · sent via SMS + push</small></div></div>`;}).join('')
+    ||'<div class="empty-mini">No alerts yet.</div>';
+}
+function renderAdmin(){
+  renderKPIs();renderChart();renderDonut();renderRecent();renderLowBal();
+  renderStudents();renderMenuMgmt();renderReports();renderAlertLog();
+}
+function setAdminPage(p){
+  UI.adminPage=p;
+  $$('.nav-item').forEach(n=>{const on=n.dataset.page===p;n.classList.toggle('active',on);n.setAttribute('aria-current',on?'page':'false');});
+  $$('.admin-page').forEach(pg=>pg.classList.toggle('active',pg.dataset.page===p));
+  const titles={dashboard:['Dashboard',TODAY_LABEL+' · St. Lawrence International School, Mysuru'],students:['Students','Manage wallets grade-wise'],menu:['Menu management','Pictures, pricing, stock & availability'],reports:['Reports','Sales & revenue · export PDF / Excel'],alerts:['Alerts','Notification log']};
+  $('#adminTitle').textContent=titles[p][0];$('#adminCrumb').textContent=titles[p][1];
+  $('.admin-body').scrollTop=0;
+}
+
+/* ============================================================
+   POS RENDERS
+   ============================================================ */
+function renderPOSCats(){
+  const cats=['Breakfast','Lunch','Snacks','Beverages'];const em={Breakfast:'🌅',Lunch:'🍱',Snacks:'🥪',Beverages:'🥤'};
+  $('#posCatTabs').innerHTML=cats.map(c=>`<button class="cat-tab ${UI.posCat===c?'active':''}" data-poscat="${c}" aria-pressed="${UI.posCat===c}"><span class="em">${em[c]}</span>${c}</button>`).join('');
+}
+function renderPOSItems(){
+  const items=DB.menu.filter(m=>m.cat===UI.posCat);
+  $('#posItems').innerHTML=items.map(m=>{
+    const avail=m.on&&m.stock>0;
+    const inCart=UI.posCart.find(c=>c.id===m.id);
+    return `<button class="pos-item" ${avail?'':'disabled'} data-action="add-item" data-id="${m.id}">
+      ${inCart?`<span class="qbadge">${inCart.qty}</span>`:''}
+      <div class="pic">${m.em}</div>
+      <div class="pi-body"><div class="pi-name">${m.name}</div>
+      <div class="pi-row"><span class="pi-price">${money(m.price)}</span>${avail?`<span class="add">${svg(I.plus)}</span>`:''}</div></div>
+      ${!avail?`<div class="soldout">${m.on?'Sold out':'Hidden'}</div>`:''}</button>`;
+  }).join('');
+}
+function renderQuickStudents(){
+  $('#quickStudents').innerHTML=DB.students.slice(0,6).map(s=>`<button class="qs" data-action="pick-student" data-id="${s.id}">${s.name.split(' ')[0]} <span class="muted">${s.id}</span></button>`).join('');
+}
+function renderPOSStudent(){
+  const el=$('#cartStudent');
+  if(!UI.posStudent){el.innerHTML='';$('#scanZone').style.display='block';return;}
+  $('#scanZone').style.display='none';
+  const s=studentById(UI.posStudent);const low=s.balance<LOW;
+  el.innerHTML=`<div class="student-card">
+    <div class="sc-top"><div class="sc-av">${initials(s.name)}</div>
+      <div class="sc-name"><b>${s.name}</b><small>Grade ${s.grade} · ${s.id}</small></div>
+      <button style="margin-left:auto;color:#fff;opacity:.8" data-action="clear-student" aria-label="Change student" title="Change student">${svg(I.x)}</button></div>
+    <div class="sc-bal"><div><div class="lbl">WALLET BALANCE</div><div class="num mono">${money(s.balance)}</div></div>${low?'<span class="badge" style="background:#fff;color:var(--rose-600)"><span class="dot"></span>Low</span>':''}</div>
+    ${s.allergy?`<div class="sc-allergy">${svg(I.alert)} Allergy: ${s.allergy}</div>`:''}</div>`;
+}
+function renderCart(){
+  const box=$('#cartItems'),foot=$('#cartFoot');
+  if(UI.posCart.length===0){
+    box.innerHTML=`<div class="cart-empty"><div class="ce-ic"><svg viewBox="0 0 24 24" fill="none" width="30" height="30"><path d="M6 6h15l-1.5 9h-12zM6 6 5 3H2m4 17a1 1 0 1 0 0 2 1 1 0 0 0 0-2m11 0a1 1 0 1 0 0 2 1 1 0 0 0 0-2" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+      <div><b style="color:var(--ink-soft)">No items yet</b><div style="font-size:12.5px;margin-top:3px">Tap menu items to build the order.</div></div></div>`;
+    foot.style.display='none';return;
+  }
+  box.innerHTML=UI.posCart.map(c=>`<div class="cart-line"><div class="cl-em">${c.em}</div>
+    <div class="cl-info"><b>${c.name}</b><small>${money(c.price)} each</small></div>
+    <div class="qty-step"><button data-action="dec-item" data-id="${c.id}">${svg(I.minus)}</button><span class="q">${c.qty}</span><button data-action="add-item" data-id="${c.id}">${svg(I.plus)}</button></div>
+    <div class="cl-amt mono">${money(c.price*c.qty)}</div></div>`).join('');
+  const total=UI.posCart.reduce((s,c)=>s+c.price*c.qty,0);
+  const stu=UI.posStudent?studentById(UI.posStudent):null;
+  const short=stu&&stu.balance<total;
+  foot.style.display='block';
+  foot.innerHTML=`<div class="row"><span>Items (${UI.posCart.reduce((s,c)=>s+c.qty,0)})</span><span class="mono">${money(total)}</span></div>
+    <div class="row"><span>Taxes</span><span class="mono">Included</span></div>
+    <div class="row total"><span>Total</span><span class="mono">${money(total)}</span></div>
+    ${stu?`<div class="bal-after ${short?'short':''}">${short?`⚠ Short by ${money(total-stu.balance)} — order will be declined`:`Balance after: ${money(stu.balance-total)}`}</div>`:'<div class="bal-after">Scan a student to charge this order</div>'}
+    <button class="btn btn-primary btn-block btn-lg ${short?'btn-warn':''}" data-action="confirm-order" ${!stu?'disabled':''}>${!stu?'Scan student first':short?'Charge anyway — will decline':'Confirm & charge '+money(total)}</button>`;
+}
+function renderPOS(){renderPOSCats();renderPOSItems();renderQuickStudents();renderPOSStudent();renderCart();}
+
+function addToCart(id){
+  const m=DB.menu.find(x=>x.id===id);if(!m||!m.on||m.stock<=0)return;
+  const ex=UI.posCart.find(c=>c.id===id);
+  if(ex&&ex.qty>=m.stock){toast({color:'amber',icon:I.alert,title:'Stock limit',body:`Only ${m.stock} × ${m.name} left.`});return;}
+  if(ex)ex.qty++;else UI.posCart.push({id:m.id,name:m.name,price:m.price,em:m.em,qty:1});
+  renderPOSItems();renderCart();
+}
+function decFromCart(id){
+  const ex=UI.posCart.find(c=>c.id===id);if(!ex)return;
+  ex.qty--;if(ex.qty<=0)UI.posCart=UI.posCart.filter(c=>c.id!==id);
+  renderPOSItems();renderCart();
+}
+function pickStudent(id){UI.posStudent=id;renderPOSStudent();renderCart();}
+function scanGo(){
+  const q=$('#scanInput').value.trim().toLowerCase();if(!q)return;
+  const exact=DB.students.find(x=>x.id.toLowerCase()===q||x.name.toLowerCase()===q);
+  if(exact){pickStudent(exact.id);$('#scanInput').value='';return;}
+  const matches=DB.students.filter(x=>x.name.toLowerCase().includes(q)||x.id.toLowerCase().includes(q));
+  if(matches.length===1){pickStudent(matches[0].id);$('#scanInput').value='';}
+  else if(matches.length>1){
+    $('#cartStudent').innerHTML=`<div style="margin:14px 22px 0"><div style="font-size:12px;color:var(--ink-mute);font-weight:600;margin-bottom:8px">${matches.length} matches — pick one:</div>
+      <div class="quick-students">${matches.slice(0,6).map(s=>`<button class="qs" data-action="pick-student" data-id="${s.id}">${s.name} <span class="muted">${s.id}</span></button>`).join('')}</div></div>`;
+  }
+  else toast({color:'rose',icon:I.x,title:'Student not found',body:`No match for "${q}". Try an ID like STU-04.`});
+}
+function confirmOrder(){
+  if(!UI.posStudent||UI.posCart.length===0)return;
+  const cart=UI.posCart.slice();const sid=UI.posStudent;
+  const res=placeOrder(sid,cart);
+  showOrderResult(res,sid,cart);
+  if(res.ok){UI.posCart=[];}
+  renderPOS();
+  // keep other personas fresh
+  if(UI.role){renderAdmin();renderParent();}
+}
+
+/* ============================================================
+   PARENT RENDERS
+   ============================================================ */
+function childTxns(){return DB.txns.filter(t=>t.sid===UI.parentChild);}
+function childNotifs(){return DB.notifs.filter(n=>n.sid===UI.parentChild);}
+function unreadCount(){return childNotifs().filter(n=>n.unread).length;}
+
+function renderParentHome(){
+  const kids=DB.students.filter(s=>['STU-01','STU-04'].includes(s.id)); // this parent's children
+  const child=studentById(UI.parentChild);
+  const low=child.balance<LOW;
+  const buys=childTxns().filter(t=>t.day==='Today'&&t.type==='buy');
+  const spentToday=buys.reduce((s,t)=>s+t.amount,0);
+  const ordersToday=buys.length;
+  const lastBuy=buys[0];
+  $('#pHome').innerHTML=`<div class="ph">
+    <header class="ph-head">
+      <div class="ph-hi"><small>Good afternoon</small><b>Mr. Sharma</b></div>
+      <button class="ph-bell" data-pgo="notifs" aria-label="Notifications">${svg(I.bell)}${unreadCount()?'<span class="ping"></span>':''}</button>
+    </header>
+    <div class="ph-kids">${kids.map(k=>`<button class="kid ${k.id===UI.parentChild?'active':''}" data-action="pick-child" data-id="${k.id}" aria-pressed="${k.id===UI.parentChild}">
+      <span class="kav" style="background:${avColor(k.id)}">${initials(k.name)}</span>
+      <span class="kid-info"><b>${k.name.split(' ')[0]}</b><small>Grade ${k.grade}</small></span></button>`).join('')}</div>
+    <div class="walletcard">
+      <span class="wc-id">${child.id}</span>
+      <span class="wc-watermark">${svg(I.wallet)}</span>
+      <div class="wc-eyebrow">Student wallet</div>
+      <div class="wc-name">${child.name} · Grade ${child.grade}</div>
+      <div class="wc-bal mono">${money(child.balance)}</div>
+      <button class="wc-auto" data-pgo="recharge"><span class="dot"></span>${low?'Low balance · Recharge now':'Auto-recharge off · Set up'}</button>
+    </div>
+    <div class="ph-actions">
+      <button class="act primary" data-pgo="recharge"><span class="act-ic">${svg(I.plus)}</span><b>Recharge</b></button>
+      <button class="act" data-pgo="history"><span class="act-ic ic-indigo">${svg(I.clock)}</span><b>History</b></button>
+      <button class="act" data-pgo="recharge"><span class="act-ic ic-amber">${svg(I.refresh)}</span><b>Auto-top</b></button>
+    </div>
+    <div class="ph-sec"><div class="ph-sechead"><h4>Today</h4><a data-pgo="history">View all</a></div>
+      <div class="ph-stats">
+        <div class="pstat"><div class="pstat-head"><span class="pstat-ic ic-mint">${svg(I.cash)}</span>Spent</div>
+          <div class="pstat-val mono">${money(spentToday)}</div><div class="pstat-sub">across ${ordersToday} canteen order${ordersToday===1?'':'s'}</div></div>
+        <div class="pstat"><div class="pstat-head"><span class="pstat-ic ic-indigo">${svg(I.store)}</span>Orders</div>
+          <div class="pstat-val mono">${ordersToday}</div><div class="pstat-sub">${lastBuy?'last at '+lastBuy.time.replace('Today, ',''):'no orders yet'}</div></div>
+      </div></div>
+    <div class="ph-sec"><div class="ph-sechead"><h4>Recent activity</h4><a data-pgo="history">View all</a></div>
+      <div class="ph-card">${childTxns().slice(0,4).map(parentTxnRow).join('')||'<div class="empty-mini">No activity yet.</div>'}</div></div>
+  </div>`;
+}
+function parentTxnRow(t){
+  const map={buy:{c:'buy',em:'🍽️',cls:'minus',pfx:'−'},add:{c:'add',em:'💰',cls:'plus',pfx:'+'},dec:{c:'dec',em:'⚠️',cls:'dec',pfx:''}};
+  const m=map[t.type];
+  return `<div class="txn"><div class="tx-ic ${m.c}">${m.em}</div>
+    <div class="tx-info"><b>${t.title}</b><small>${t.time}</small></div>
+    <div class="tx-amt ${m.cls}">${m.pfx}${money(t.amount)}<small>${t.type==='dec'?'declined':money(t.balAfter)}</small></div></div>`;
+}
+function renderParentHistory(){
+  const tx=childTxns();const days=[...new Set(tx.map(t=>t.day))];
+  $('#pHistory').innerHTML=`<div style="padding:18px 20px 6px"><h4 style="font-size:18px">Transaction history</h4><p class="muted" style="font-size:12.5px;margin-top:3px">${studentById(UI.parentChild).name} · ${tx.length} records</p></div>
+  <div style="padding:0 20px 18px">${days.map(d=>`<div class="day-label">${d}</div>${tx.filter(t=>t.day===d).map(parentTxnRow).join('')}`).join('')||'<div class="empty-mini">No transactions yet.</div>'}</div>`;
+}
+function renderParentNotifs(){
+  // mark read on open
+  const icmap={buy:{c:'#35755a',i:I.cash},add:{c:'#2e7f94',i:I.wallet},low:{c:'#dd930f',i:I.alert}};
+  const list=childNotifs();
+  $('#pNotifs').innerHTML=`<div style="padding:18px 20px 6px"><h4 style="font-size:18px">Notifications</h4><p class="muted" style="font-size:12.5px;margin-top:3px">All alerts for ${studentById(UI.parentChild).name.split(' ')[0]} in one place</p></div>
+  <div style="padding:0 20px 18px">${list.map(n=>{const m=icmap[n.type]||icmap.buy;
+    return `<div class="notif ${n.unread?'unread':''}"><div class="nt-ic" style="background:${m.c}">${svg(m.i)}</div>
+    <div class="nt-body" style="flex:1"><b>${n.title}</b><p>${n.body}</p><small>${n.time}</small></div></div>`;}).join('')||'<div class="empty-mini">No notifications yet.</div>'}</div>`;
+}
+function renderParentMessages(){
+  $('#pMessages').innerHTML=`<div style="padding:18px 20px 6px"><h4 style="font-size:18px">Cafeteria messages</h4><p class="muted" style="font-size:12.5px;margin-top:3px">Notes & requests to the cafeteria staff</p></div>
+  <div style="padding:6px 20px 14px;display:flex;flex-direction:column">${DB.messages.map(m=>`<div class="msg-bubble ${m.dir}">${m.text}<small>${m.time}</small></div>`).join('')}</div>
+  <div style="padding:0 20px 18px"><div class="note-compose"><textarea id="msgInput" placeholder="Write a note to the cafeteria… (e.g. allergy info, lunch preference)"></textarea>
+    <div class="nc-foot"><span class="muted" style="font-size:11.5px">Staff usually reply within an hour</span><button class="btn btn-primary" style="padding:8px 14px;font-size:13px" data-action="send-msg">${svg(I.send)} Send</button></div></div></div>`;
+}
+function renderParentRecharge(){
+  const child=studentById(UI.parentChild);
+  const amts=[100,200,500,1000,1500,2000];
+  const methods=[{k:'upi',em:'📲',n:'UPI',d:'GPay, PhonePe, Paytm'},{k:'card',em:'💳',n:'Debit / Credit card',d:'Visa, Mastercard, RuPay'},{k:'nb',em:'🏦',n:'Net banking',d:'All major banks'}];
+  $('#pRecharge').innerHTML=`<div style="padding:18px 20px 6px"><div style="display:flex;align-items:center;gap:10px"><button data-pgo="home" aria-label="Back to home" style="color:var(--ink-soft)">${svg(I.back)}</button><h4 style="font-size:18px">Recharge wallet</h4></div>
+    <p class="muted" style="font-size:12.5px;margin-top:6px">${child.name} · current ${money(child.balance)}</p></div>
+  <div style="padding:8px 20px 18px">
+    <label style="font-size:12.5px;font-weight:600;color:var(--ink-soft)">Select amount</label>
+    <div class="recharge-amts">${amts.map(a=>`<button class="ramt ${UI.rechargeAmt===a?'active':''}" data-action="set-recharge" data-amt="${a}">₹${a}</button>`).join('')}</div>
+    <label style="font-size:12.5px;font-weight:600;color:var(--ink-soft)">Payment method</label>
+    <div class="pay-methods" style="margin-top:8px">${methods.map(m=>`<button class="pay-m ${UI.payMethod===m.k?'active':''}" data-action="set-pay" data-pay="${m.k}"><span class="pm-ic">${m.em}</span><div><b>${m.n}</b><small>${m.d}</small></div><span class="pm-check">${svg(I.check)}</span></button>`).join('')}</div>
+    <button class="btn btn-primary btn-block btn-lg" data-action="do-recharge">Pay ${money(UI.rechargeAmt)} →</button>
+    <p class="muted" style="font-size:11px;text-align:center;margin-top:12px">🔒 Secured by 256-bit encryption · PCI-DSS compliant</p>
+  </div>`;
+}
+function renderParent(){
+  renderParentHome();renderParentHistory();renderParentNotifs();renderParentMessages();renderParentRecharge();
+  const b=$('#pNotifBadge'),u=unreadCount();
+  if(u){b.style.display='grid';b.textContent=u;}else b.style.display='none';
+  $('#pClock').textContent=clockStr();
+}
+function setParentTab(t){
+  const prev=UI.parentTab;UI.parentTab=t;
+  // keep "new" highlight visible while viewing alerts; mark read only when leaving the tab
+  if(prev==='notifs'&&t!=='notifs')childNotifs().forEach(n=>n.unread=false);
+  renderParent();
+  $$('.p-view').forEach(v=>v.classList.toggle('active',v.dataset.pview===t));
+  $$('.p-tab').forEach(b=>{const on=b.dataset.pgo===t;b.classList.toggle('active',on);b.setAttribute('aria-current',on?'page':'false');});
+  $('#pScreen').scrollTop=0;
+}
+
+/* ============================================================
+   MODALS  (accessible dialog: focus-in, trap, focus-return)
+   ============================================================ */
+let _lastFocus=null;
+function openModal(html){
+  _lastFocus=document.activeElement;
+  $('#modalInner').innerHTML=html;
+  $('#modalRoot').classList.add('show');
+  $('.stage').setAttribute('aria-hidden','true');
+  const dlg=$('#modalInner .modal');
+  if(dlg){dlg.setAttribute('role','dialog');dlg.setAttribute('aria-modal','true');
+    const h=dlg.querySelector('h3');if(h){h.id=h.id||'modalTitle';dlg.setAttribute('aria-labelledby',h.id);}
+    const focusables=dlg.querySelectorAll('input,button,select,textarea,[tabindex]');
+    (dlg.querySelector('input')||focusables[0])?.focus();
+  }
+}
+function closeModal(){
+  $('#modalRoot').classList.remove('show');
+  $('#modalInner').innerHTML='';
+  $('.stage').removeAttribute('aria-hidden');
+  if(_lastFocus&&_lastFocus.focus)_lastFocus.focus();
+}
+$('#modalRoot').addEventListener('click',e=>{if(e.target.id==='modalRoot')closeModal();});
+document.addEventListener('keydown',e=>{if(e.key==='Escape'&&$('#modalRoot').classList.contains('show'))closeModal();});
+$('#modalRoot').addEventListener('keydown',e=>{
+  if(e.key!=='Tab')return;
+  const f=[...$('#modalInner').querySelectorAll('input,button,select,textarea,[tabindex]:not([tabindex="-1"])')].filter(el=>!el.disabled&&el.offsetParent!==null);
+  if(!f.length)return;const first=f[0],last=f[f.length-1];
+  if(e.shiftKey&&document.activeElement===first){e.preventDefault();last.focus();}
+  else if(!e.shiftKey&&document.activeElement===last){e.preventDefault();first.focus();}
+});
+
+function openAddBalance(presetId){
+  openModal(`<div class="modal"><div class="modal-head"><div><h3>Add wallet balance</h3><p>Search a student by name or ID, then top up.</p></div><button class="x" data-action="close-modal" aria-label="Close dialog">${svg(I.x)}</button></div>
+    <div class="modal-body">
+      <div class="field"><label>Find student</label><div class="control">${svg('<circle cx="11" cy="11" r="7" stroke="currentColor" stroke-width="1.8" fill="none"/><path d="m20 20-3-3" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/>','')}<input type="text" id="mbSearch" placeholder="e.g. Diya or STU-02" value="${presetId?studentById(presetId).name:''}" autocomplete="off"/></div></div>
+      <div id="mbResult"></div>
+      <div id="mbAmtBlock" style="display:none">
+        <div class="field" style="margin-top:16px"><label>Amount to add</label><div class="control"><span class="pfx">₹</span><input type="number" id="mbAmt" placeholder="0" min="1"/></div>
+        <div class="amt-quick">${[100,200,500,1000].map(a=>`<button data-action="mb-quick" data-amt="${a}">+₹${a}</button>`).join('')}</div></div>
+      </div>
+    </div>
+    <div class="modal-foot"><button class="btn btn-ghost btn-block" data-action="close-modal">Cancel</button><button class="btn btn-primary btn-block" id="mbConfirm" data-action="mb-confirm" disabled>Add balance</button></div></div>`);
+  let sel=presetId||null;
+  const searchEl=$('#mbSearch');
+  function doSearch(){
+    const q=searchEl.value.trim().toLowerCase();
+    if(!q){$('#mbResult').innerHTML='';$('#mbAmtBlock').style.display='none';$('#mbConfirm').disabled=true;sel=null;return;}
+    const matches=DB.students.filter(s=>s.name.toLowerCase().includes(q)||s.id.toLowerCase().includes(q)).slice(0,4);
+    if(matches.length===0){$('#mbResult').innerHTML='<div class="empty-mini">No student found.</div>';$('#mbAmtBlock').style.display='none';$('#mbConfirm').disabled=true;sel=null;return;}
+    if(matches.length===1){selectStudent(matches[0].id);return;}
+    $('#mbResult').innerHTML=matches.map(s=>`<button class="found-student" style="width:100%;cursor:pointer;text-align:left;border:1px solid var(--line);background:#fff;margin-bottom:8px" data-action="mb-pick" data-id="${s.id}"><span class="avatar" style="background:${avColor(s.id)}">${initials(s.name)}</span><div><b style="font-weight:600">${s.name}</b><div style="font-size:12px;color:var(--ink-mute)">Grade ${s.grade} · ${s.id}</div></div><div class="fs-bal"><small>Balance</small><b>${money(s.balance)}</b></div></button>`).join('');
+    $('#mbAmtBlock').style.display='none';$('#mbConfirm').disabled=true;
+  }
+  function selectStudent(id){
+    sel=id;const s=studentById(id);
+    $('#mbResult').innerHTML=`<div class="found-student"><span class="avatar" style="background:${avColor(s.id)}">${initials(s.name)}</span><div><b style="font-weight:600">${s.name}</b><div style="font-size:12px;color:var(--ink-soft)">Grade ${s.grade} · ${s.id}${s.allergy?` · ⚠ ${s.allergy}`:''}</div></div><div class="fs-bal"><small>Current</small><b>${money(s.balance)}</b></div></div>`;
+    $('#mbAmtBlock').style.display='block';$('#mbConfirm').disabled=true;
+    setTimeout(()=>$('#mbAmt').focus(),50);
+  }
+  searchEl.addEventListener('input',doSearch);
+  if(presetId)selectStudent(presetId);
+  // expose for delegated handlers
+  $('#modalInner')._selectStudent=selectStudent;
+  $('#modalInner')._getSel=()=>sel;
+  setTimeout(()=>searchEl.focus(),50);
+}
+
+function showOrderResult(res,sid,cart){
+  const s=studentById(sid);
+  if(res.ok){
+    openModal(`<div class="modal"><div class="result-modal">
+      <div class="result-ic ok">${svg(I.check)}</div>
+      <h3>Order confirmed!</h3><p>${money(res.total)} charged to ${s.name}'s wallet. A push + SMS was sent to the parent.</p>
+      <div class="receipt"><div class="rc-head"><svg viewBox="0 0 24 24" fill="none" width="18" height="18"><path d="M12 2.7 18.6 5.3v6c0 4.9-2.9 8.2-6.6 10-3.7-1.8-6.6-5.1-6.6-10v-6L12 2.7Z" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/><path d="m12 5.6.95 1.6L12 8.8l-.95-1.6L12 5.6Z" fill="currentColor"/></svg><div><b>St. Lawrence International School</b><small>Campus Café · Yadavagiri, Mysuru</small></div></div>${cart.map(c=>`<div class="rc-row"><span>${c.qty}× ${c.name}</span><b>${money(c.price*c.qty)}</b></div>`).join('')}
+        <div class="rc-row tot"><span>Total paid</span><span class="mono">${money(res.total)}</span></div>
+        <div class="rc-row" style="margin-top:4px"><span>Remaining balance</span><b class="mono">${money(res.balAfter)}</b></div></div>
+      <button class="btn btn-primary btn-block btn-lg" data-action="close-modal">Next order</button>
+    </div></div>`);
+  }else{
+    openModal(`<div class="modal"><div class="result-modal">
+      <div class="result-ic fail">${svg(I.x)}</div>
+      <h3>Order declined</h3><p>${s.name}'s balance (${money(s.balance)}) is too low for this ${money(res.total)} order. The parent has been notified to recharge.</p>
+      <div class="receipt"><div class="rc-row"><span>Order total</span><b>${money(res.total)}</b></div>
+        <div class="rc-row"><span>Available balance</span><b class="mono" style="color:var(--rose-600)">${money(s.balance)}</b></div>
+        <div class="rc-row tot"><span>Short by</span><span class="mono" style="color:var(--rose-600)">${money(res.total-s.balance)}</span></div></div>
+      <button class="btn btn-ghost btn-block btn-lg" data-action="close-modal">Close</button>
+    </div></div>`);
+  }
+}
+
+/* ============================================================
+   EVENT DELEGATION
+   ============================================================ */
+// role switch
+$('#roleSwitch').addEventListener('click',e=>{const b=e.target.closest('button');if(b)setRole(b.dataset.role);});
+$('#resetBtn').addEventListener('click',()=>{
+  DB=seed();UI.posCart=[];UI.posStudent=null;UI.parentChild='STU-01';UI.gradeFilter='All';UI.menuCat='All';UI.posCat='Breakfast';
+  renderAdmin();renderPOS();renderParent();closeModal();
+  toast({color:'sky',icon:I.check,title:'Demo reset',body:'All wallets, orders & alerts restored to defaults.'});
+});
+// login role cards
+$('#login').addEventListener('click',e=>{const c=e.target.closest('[data-goto]');if(c)setRole(c.dataset.goto);});
+// admin nav
+$('#admin').addEventListener('click',e=>{const n=e.target.closest('.nav-item');if(n){setAdminPage(n.dataset.page);return;}});
+
+// GLOBAL action handler
+document.addEventListener('click',e=>{
+  const t=e.target.closest('[data-action]');
+  // grade/menu/poscat chips & parent tabs (no data-action)
+  const grade=e.target.closest('[data-grade]');if(grade){UI.gradeFilter=grade.dataset.grade;renderStudents();return;}
+  const mcat=e.target.closest('[data-menucat]');if(mcat){UI.menuCat=mcat.dataset.menucat;renderMenuMgmt();return;}
+  const pcat=e.target.closest('[data-poscat]');if(pcat){UI.posCat=pcat.dataset.poscat;renderPOSCats();renderPOSItems();return;}
+  const ptab=e.target.closest('[data-pgo]');if(ptab){setParentTab(ptab.dataset.pgo);return;}
+  if(!t)return;
+  const a=t.dataset.action,id=t.dataset.id;
+  switch(a){
+    case 'open-addbal':openAddBalance();break;
+    case 'quick-topup':openAddBalance(id);break;
+    case 'close-modal':closeModal();break;
+    case 'toggle-menu':{const m=DB.menu.find(x=>x.id===id);m.on=!m.on;renderMenuMgmt();renderPOSItems();break;}
+    case 'export':toast({color:'green',icon:I.check,title:'Report exported',body:'slis-sales-report-jul-2026 generated & ready to download.'});break;
+    // POS
+    case 'add-item':addToCart(id);break;
+    case 'dec-item':decFromCart(id);break;
+    case 'pick-student':pickStudent(id);break;
+    case 'clear-student':UI.posStudent=null;renderPOSStudent();renderCart();break;
+    case 'scan-go':scanGo();break;
+    case 'confirm-order':confirmOrder();break;
+    // parent
+    case 'pick-child':UI.parentChild=id;renderParent();break;
+    case 'set-recharge':UI.rechargeAmt=+t.dataset.amt;renderParentRecharge();break;
+    case 'set-pay':UI.payMethod=t.dataset.pay;renderParentRecharge();break;
+    case 'do-recharge':{addBalance(UI.parentChild,UI.rechargeAmt,UI.payMethod.toUpperCase()+' recharge');renderParent();renderAdmin();setParentTab('home');toast({color:'green',icon:I.wallet,src:'Parent app',title:'Recharge successful',body:`${money(UI.rechargeAmt)} added via ${UI.payMethod.toUpperCase()}.`});break;}
+    case 'send-msg':{const v=$('#msgInput').value.trim();if(!v)break;DB.messages.push({dir:'out',text:v,time:nowTime().replace('Today, ','Today ')});renderParentMessages();setTimeout(()=>{DB.messages.push({dir:'in',text:'Thanks for letting us know — we\'ve recorded it. 👍',time:nowTime().replace('Today, ','Today ')});renderParentMessages();$('#pMessages').scrollIntoView?0:0;$('#pScreen').scrollTop=$('#pScreen').scrollHeight;},1100);$('#pScreen').scrollTop=$('#pScreen').scrollHeight;break;}
+    // modal add-balance
+    case 'mb-pick':$('#modalInner')._selectStudent(id);break;
+    case 'mb-quick':{const inp=$('#mbAmt');inp.value=(+inp.value||0)+(+t.dataset.amt);$('#mbConfirm').disabled=!(+inp.value>0);break;}
+    case 'mb-confirm':{const sel=$('#modalInner')._getSel();const amt=+$('#mbAmt').value;if(!sel||!(amt>0))break;const s=addBalance(sel,amt,'Admin top-up');closeModal();renderAdmin();renderParent();toast({color:'green',icon:I.wallet,src:'Admin',title:'Balance added',body:`${money(amt)} → ${s.name}. New balance ${money(s.balance)}.`});break;}
+  }
+});
+// modal amount input enable
+document.addEventListener('input',e=>{if(e.target.id==='mbAmt'){$('#mbConfirm').disabled=!(+e.target.value>0&&$('#modalInner')._getSel());}});
+// enter key on scan + modal search
+document.addEventListener('keydown',e=>{
+  if(e.key==='Enter'&&e.target.id==='scanInput'){scanGo();}
+  if(e.key==='Enter'&&e.target.id==='mbAmt'){const b=$('#mbConfirm');if(!b.disabled)b.click();}
+});
+// admin topbar: bell -> alerts, live student search
+$('#topbarBell').addEventListener('click',()=>setAdminPage('alerts'));
+$('#adminSearch').addEventListener('input',e=>{UI.studentSearch=e.target.value;if(UI.adminPage!=='students')setAdminPage('students');renderStudents();});
+
+/* ============================================================
+   INIT
+   ============================================================ */
+renderAdmin();renderPOS();renderParent();
+$('#pClock').textContent=clockStr();
+setInterval(()=>{$('#pClock').textContent=clockStr();},30000);
+</script>
+</body>
+</html>
